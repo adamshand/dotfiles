@@ -1,0 +1,82 @@
+#########################################################################
+## Groundtruth
+
+Host gladys
+  Hostname 100.105.34.32
+  ForwardAgent no
+
+Match host "kaka.groundtruth.co.nz" exec "ifconfig | grep -q ' 172.16.1.42 '"
+  ProxyJump kauri.haume.nz
+
+Match host "*.groundtruth.co.nz" exec "ifconfig | grep -q ' 172.16.1.42 '"
+  ProxyJump kauri.haume.nz,kaka.groundtruth.co.nz
+
+Host usw-s003.rsync.net rsync.net
+  HostName usw-s003.rsync.net
+  User 3080
+  
+# groundtruth hq
+Host doris doris.groundtruth.co.nz
+  #Hostname 101.100.145.36
+  Hostname doris.groundtruth.co.nz
+
+Host kaka kaka.groundtruth.co.nz
+  #Hostname 192.168.81.100
+  Hostname kaka.groundtruth.co.nz
+
+Host whio whio.groundtruth.co.nz
+  #Hostname 101.100.145.34
+  Hostname whio.groundtruth.co.nz
+
+# groundtruth in cloud
+Host usw-s003.rsync.net rsync.net
+    Hostname usw-s003.rsync.net 
+    User 3080
+
+Host carmen carmen.trap.nz
+    Hostname carmen.trap.nz
+
+Host edith edith.trap.nz
+    Hostname edith.trap.nz
+
+Host diego1 diego1.trap.nz
+    Hostname diego1.trap.nz
+
+Host diego2 diego2.trap.nz
+    Hostname diego2.trap.nz
+
+Host frida frida.trap.nz
+    Hostname frida.trap.nz
+
+Host discourse
+    Hostname discourse.groundtruth.co.nz
+
+Host gtvprod01
+    Hostname gtvprod01.groundtruth.co.nz
+
+Host gtvprod02
+    Hostname gtvprod02.groundtruth.co.nz
+
+Host hihi
+    Hostname hihi.groundtruth.co.nz
+
+Host kahlo
+    Hostname kahlo.trap.nz
+
+Host leia leia.groundtruth.co.nz
+    Hostname leia.groundtruth.co.nz
+
+Host rowi
+    Hostname rowi.groundtruth.co.nz
+
+Host ruth
+    Hostname ruth.groundtruth.co.nz
+
+Host spotipo
+    Hostname spotipo.groundtruth.co.nz
+
+Host tui
+    Hostname tui.groundtruth.co.nz
+
+Host unms
+    Hostname unms.groundtruth.co.nz
