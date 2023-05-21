@@ -1,9 +1,0 @@
-Host squidward squidward.ink.fish
-  HostName squidward.ink.fish
-  Port 22622
-  ForwardAgent yes
-
-Host 10.10.1.*
-  User administrator
-  #Ciphers 3des-cbc
-  KexAlgorithms +diffie-hellman-group-exchange-sha1,diffie-hellman-group14-sha1,diffie-hellman-group1-sha1
