@@ -100,6 +100,8 @@ alias genpw='bw generate -cp --words 2 --separator . --includeNumber'
 pass() {
   bw list items --search $* --pretty | egrep "(name|username|password)\":" | sed -e 's/^ *//' -e 's/^"//' -e 's/",$//' -e 's/": "/: /' -e 's/^name:/\nname:    /'}
 
+cm() { chezmoi $*; }
+
 dps()   { docker ps --format "table {{.Names}}\t {{.Size}}\t {{.Status}}\t {{.Ports}}" | sed -e 's/0.0.0.0://g' -e 's/, :::[0-9]*->[0-9]*\/[tu][cd][p]//g'; }
 de()    {
   CONTAINER=$1
