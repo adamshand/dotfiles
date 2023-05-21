@@ -1,0 +1,40 @@
+# From https://bluz71.github.io/2018/03/15/bash-shell-tweaks-tips.html
+
+# The TAB key cycles forward through the completion choices. Press an arrow key, such as right-arrow, to choose a selection.
+TAB: menu-complete
+
+# The Shift-TAB key cycles backward through the completion choices. This is useful if you pressed TAB too many times and overshot the desired choice. Like TAB, press an arrow key, such as right-arrow, to choose a selection.
+"\e[Z": menu-complete-backward
+
+# The first press of the completion key, TAB, will display a list of choices that match the given prefix, whilst the next press of the completion key will start cycling through the available choices.
+set menu-complete-display-prefix on
+
+## The above listed completion settings will result in Zsh AUTO_MENU-like completion behaviour.
+
+# Display completion matches upon the first press of the TAB key.
+set show-all-if-ambiguous on
+
+# Enable colors when completing filenames and directories.
+# Filename and directory colors are defined in the LS_COLORS environment variable.
+#set colored-stats on
+
+# When a completion matches multiple items highlight the common matching prefix in color.
+# The prefix color used will be the so option defined in the LS_COLORS environment variable. Note, this is a new option only available with the latest versions of Readline (version 7.0 and above) and Bash (version 4.4 and above).
+set colored-completion-prefix on
+
+# Ignore case when completing.
+set completion-ignore-case on
+
+# Treat hypens and underscores as equivalent when completing.
+set completion-map-case on
+
+# Automatically append the / slash character to the end of symlinked directories when completing.
+set mark-symlinked-directories on
+
+# Enable incremental history navigation with the UP and DOWN arrow keys. This will use the already typed text as a required prefix when navigating through history.
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+
+# Disable beeps and do not display control characters.
+set bell-style none
+set echo-control-characters off

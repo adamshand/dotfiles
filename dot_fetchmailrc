@@ -1,0 +1,4 @@
+set daemon 60
+poll pixmail.pixelworks.com with proto IMAP 
+  user 'ashand' there with password 'what.nunchuc' is adam here options fetchall
+  mda '/usr/bin/procmail -d adam'

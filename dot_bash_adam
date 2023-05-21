@@ -1,0 +1,177 @@
+# Adam's ~/.bash_profile
+# Originally written 8 June 1999
+
+DEBUG=""
+#DEBUG="yes"
+#set -x
+
+shopt -s checkwinsize
+
+export PS1='\n\[\033[1m\]$PWD\n[`date +%I:%M%p`] \h(\u)\$\[\033[0m\] '
+#export PS2="? "
+# this sets iTerm tab name to user@host (%%.* strips off everything after the first .)
+export PROMPT_COMMAND="echo -ne '\033]0;${USER}@${HOSTNAME%%.*}\007';$PROMPT_COMMAND"
+
+export HISTCONTROL=ignoredups
+export HISTFILE=~/.bash_history
+export HISTFILESIZE=50000
+export HISTSIZE=50000
+
+# This makes sure that history isn't lost between shells and new shells get chronological
+# shell history from all currently open shells. 
+_bash_history_append() {
+    builtin history -a
+}
+PROMPT_COMMAND="_bash_history_append; $PROMPT_COMMAND"
+
+[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
+
+export IGNOREEOF=0
+export SUDO_PROMPT="Sudo Password: "
+
+export EDITOR="vim"
+export PAGER=less
+export LESS="-FXR"
+
+# set beep volume in %
+# xset b 50
+set bell-style visible
+set show-all-if-ambiguous on
+set -o emacs
+ulimit -c 0	# minimize core dump file size
+
+# Set OS dependant variables
+if [ $OSTYPE == "linux" -o $OSTYPE == "linux-gnu" ]; then
+	test $DEBUG && echo "Detected Linux"
+	LINUX="yes"
+	export PATH=${PATH}:/usr/X11R6/bin:~/.local/bin
+	export MANPATH=${MANPATH}:/usr/share/man:/usr/X11R6/man
+
+	# set display environment variable unless it's already set
+	test -z $DISPLAY && export DISPLAY="localhost:0.0"
+
+	if [ -f /etc/debian_version ]; then
+		#eval $(lesspipe)
+		export LESSOPEN="| /usr/bin/lesspipe %s";
+		export LESSCLOSE="/usr/bin/lesspipe %s %s";
+	elif [ -f /etc/redhat-release ]; then
+		eval $(lesspipe.sh)
+	fi
+
+	l() { ls -lh $*; }	# now relying on iTerm scroll find/replace
+
+elif [ ${OSTYPE:0:6} == "darwin" ]; then
+	test $DEBUG && echo "Detected Darwin"
+	DARWIN="yes"
+	export PATH=${PATH}:/Library/Developer/CommandLineTools/usr/bin/
+	export MANPATH=${MANPATH}:/usr/share/man
+
+	alias top="top -o cpu -O vsize"
+	alias updatedb="sudo -b /usr/libexec/locate.updatedb"
+	# opens ssh session in new iTerm tab.  
+	# echo -e "\033]50;SetProfile=ssh_profile\a" will force change iTerm profile
+	telnet() { nc $1 $2; }
+	#l() { ls -l $* | less -F; } # for a reason that is currently unfathomable "more / less -F" eats output
+	l () { ls -lhOP $*; }	# now relying on iTerm scroll find/replace
+fi # end os specific
+
+# iTerm shell integration: https://iterm2.com/documentation-shell-integration.html
+# Has to run on non-Mac shells as well for full integration
+if [ -r ~/.bash_iterm ]; then
+	test $DEBUG && echo "Running iTerm extensions"
+	source ~/.bash_iterm
+fi
+
+alias ls='ls -F'
+alias pico='pico -zbx'
+#alias mkroot='sudo bash --rcfile ~/.bash_profile'  # now a function
+alias more='less -F'
+alias grep='grep --color=auto'    # auto turns off colouring in a pipeline so don't get bogus characters when > to a file.
+alias egrep='egrep --color=auto'
+alias ssh="~/scripts/ssh.sh"	
+
+# docker aliases
+dc()  { docker container $*; }
+dcd() { docker-compose down $*; }
+dcu() { docker-compose up -d $* && docker-compose logs -f $*; }
+dcl() { docker-compose logs -f $*; }
+dcdu() { docker-compose down $* && docker-compose up -d $* && docker-compose logs -f $*; }
+
+edpro() { 
+    if [ "${HOSTNAME%.*}" == "hebe" ]; then 
+        vi ~/.bash_adam && exec bash --login
+    else
+        echo "error: edit on hebe"
+    fi ; }
+alias bw="BW_SESSION=\"tzP4XH94vrBkLW4wCFX89qILzFZXM/rGm1L1KUTy2XFtctlYuxRd1MVvMpiDQH8SaC0iio871YtDj+PW06+EHw==\";bw $* "
+mkroot() { 
+    if [ "${HOSTNAME%.*}" ==  "beam" -o "${HOSTNAME%.*}" == "ch-test1" ]; then
+      echo "no root dummy."
+    else
+      sudo bash --rcfile ~/.bash_adam
+    fi ; }
+flaunt() { egrep "($1|$)"; }	# highlight text without filtering like grep
+p() { if [ $LINUX ]; then 
+			OPTIONS="-efww"; 
+		elif [ $DARWIN ]; then
+			OPTIONS="auxww";
+		fi
+	if [ ! $1 ]; then
+		ps ${OPTIONS} 
+	else
+		ps ${OPTIONS} | egrep -i $1
+	fi; }
+edit()	{ nano -wzxi -T4 $*; }
+#edpass()	{ pgpedit.sh ~/Dropbox/home/etc/passwords/passwords.gpg; }
+#pass()	{ gpg -o - ~/Dropbox/home/etc/passwords/passwords.gpg | grep -i $1; read; clear; }
+#vade () { curl --silent "http://adam.nz/vade?do=export_raw" | grep $1 | awk 'BEGIN {FS="</?(code|WRAP|WRAP indent)>"} /ode><WRAP/ {print $2"\n\t-- "$4}' | egrep -i --color "(${1}|$)"; }
+#vade () { curl --silent "http://doku.adam.nz/vade?do=export_text" | egrep -v "(^ *$)" | sed -e 's/^ *//' | egrep -A 1 "^#.*(${1}).*$"; }
+vade () { links -dump -width 512 http://adam.nz/vade/ | egrep -v '^ *\$' | egrep --color=auto -A2 "^ # .*${*}.*\$" ;}
+## old stuff, kept for posterity
+
+## Set location dependant variables
+#ls /weta > /dev/null 2>&1
+#if [ -d /weta ]; then
+#	 test $DEBUG && echo "Detected Weta"
+#	 WETA="yes"
+#	 export PATH=$PATH:/vol/weta/scripts:/vol/weta/tech/bin:/var/mailman/bin:/opt/xcat/bin:/vol/weta/tech/wrangler:/tech/tools/bin
+#fi
+
+#elif [ "$HOSTTYPE" == "sparc" ]; then
+#	test $DEBUG && echo "Detected Sun"
+#	export PATH=${PATH}:/usr/ccs/bin:/usr/openwin/bin
+#	export MANPATH=${MANPATH}:/usr/openwin/man
+
+#elif [ "$OS" ]; then
+#	if [ "$OS" == "irix" ]; then
+#		test $DEBUG && echo "Detected Irix"
+#		IRIX="yes"
+#		export PATH=${PATH}:/usr/gnu/bin:/usr/bsd
+#		export MANPATH=${MANPATH}:/usr/openwin/man
+#	fi
+
+# from http://nakedape.cc/wiki/index.cgi/RpmShellNotes
+#function rpmwhich { 
+#	for f in $*; do 
+#		ff=$(which $f 2>/dev/null) 
+#		if [ -n "$ff" ]; then 
+#			printf "%s: " $ff 
+#			rpm -qf $ff 
+#		else 
+#		   printf "'%s' not found!\n" $f 
+#		fi 
+#	done 
+#}
+
+#p() { if [ $LINUX ]; then 
+#			OPTIONS="-efww"; 
+#		elif [ $IRIX ] ; then
+#			OPTIONS="-ef";
+#		elif [ $DARWIN ]; then
+#			OPTIONS="auxww";
+#		fi
+#	if [ ! $1 ]; then
+#		ps ${OPTIONS} | less -F
+#	else
+#		ps ${OPTIONS} | grep -i $1 | less -F
+#	fi; }

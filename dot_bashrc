@@ -1,0 +1,6 @@
+# any kind of output here breaks scp
+
+if [ $HOSTNAME == "ch-test1" -a -r ~/.bash_adam ]; then
+  source ~/.bash_adam
+fi
+
