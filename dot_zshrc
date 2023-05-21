@@ -93,7 +93,7 @@ alias egrep='egrep --color=auto'
 alias grep='grep --color=auto'
 alias mv='mv -vi'
 alias mkroot="sudo -E zsh"
-alias nano='nano -xEGil -T2'       # -q maybe interesting
+alias nano='nano -xz'
 alias pico='nano'
 alias genpw='bw generate -cp --words 2 --separator . --includeNumber'
 
