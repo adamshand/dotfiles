@@ -133,11 +133,6 @@ dl()    { docker logs --follow --since=1m --timestamps $*; }
 dcl()   { docker-compose logs --follow --timestamps $*; }
 dcdu()  { dcd && $DC up -d && dcl; }
 
-tnz()   { cd ~/gt/tnz/trapnz-infrastructure; }
-tnzu()  { cd ~/gt/tnz/trapnz-infrastructure; dcu; }
-tnzd()  { cd ~/gt/tnz/trapnz-infrastructure; dcd; }
-tnzl()  { cd ~/gt/tnz/trapnz-infrastructure; dcl $*; }
-
 flaunt() { egrep "($1|$)"; }        # highlight matches without filtering
 
 gcp() {
