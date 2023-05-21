@@ -101,6 +101,9 @@ pass() {
   bw list items --search $* --pretty | egrep "(name|username|password)\":" | sed -e 's/^ *//' -e 's/^"//' -e 's/",$//' -e 's/": "/: /' -e 's/^name:/\nname:    /'}
 
 cm() { chezmoi $*; }
+cma() { chezmoi add $*; }
+cme() { chezmoi edit $*; }
+cmu() { chezmoi update $*; }
 
 dps()   { docker ps --format "table {{.Names}}\t {{.Size}}\t {{.Status}}\t {{.Ports}}" | sed -e 's/0.0.0.0://g' -e 's/, :::[0-9]*->[0-9]*\/[tu][cd][p]//g'; }
 de()    {
