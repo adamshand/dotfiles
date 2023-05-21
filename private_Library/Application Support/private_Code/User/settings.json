@@ -1,0 +1,87 @@
+{
+  "css.lint.validProperties": ["composes"],
+  "css.lint.unknownAtRules": "ignore",
+  "editor.tabSize": 2,
+  "editor.minimap.enabled": false,
+  "editor.guides.bracketPairs": "active",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.fontFamily": "'Recursive Mono Casual Static','Operator Mono', 'Dank Mono','Gintronic', Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontWeight": "200",
+  "editor.fontSize": 18,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.hover.delay": 1500,
+  "editor.lightbulb.enabled": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.codeLens": true,
+  "eslint.options": {
+    "extensions": [".js", ".jsx", ".md", ".mdx", ".ts", ".tsx"]
+  },
+  "eslint.validate": [
+    "markdown",
+    "mdx",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "svelte"
+  ],
+  "eslint.alwaysShowStatus": true,
+  "eslint.format.enable": true,
+  "eslint.nodePath": ".yarn/sdks",
+  "diffEditor.codeLens": true,
+  "gitlens.codeLens.recentChange.enabled": false,
+  "gitlens.codeLens.authors.enabled": false,
+  "gitlens.defaultGravatarsStyle": "monsterid",
+  "gitlens.showWelcomeOnInstall": false,
+  "gitlens.showWhatsNewAfterUpgrades": false,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "jest.jestCommandLine": "yarn jest",
+  "jest.autoRun": { "watch": false, "onSave": "test-src-file" },
+  "prettier.enable": true,
+  "prettier.prettierPath": ".yarn/sdks/prettier/index.js",
+  "python.defaultInterpreterPath": "/opt/homebrew/bin/python3",
+  "redhat.telemetry.enabled": false,
+  "search.exclude": {
+    "**/.yarn": true,
+    "**/.pnp.*": true
+  },
+  "thunder-client.saveToWorkspace": true,
+  "terminal.integrated.fontSize": 18,
+  "terminal.integrated.copyOnSelection": true,
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.tsdk": ".yarn/sdks/typescript/lib",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "vsicons.dontShowNewVersionMessage": true,
+  "window.title": "${activeEditorMedium}${separator}${rootName}",
+  "workbench.colorTheme": "Gruvbox Dark Hard",
+  "workbench.iconTheme": "vscode-icons",
+  "workbench.sideBar.location": "right",
+  "workbench.startupEditor": "none",
+  "workbench.editor.labelFormat": "short",
+  "workbench.editor.openPositioning": "right",
+  "workbench.editor.wrapTabs": true,
+  "[markdown]": {
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wordWrapColumn": 80
+  },
+  "svelte.enable-ts-plugin": true,
+  "svelte.plugin.svelte.note-new-transformation": false,
+  "explorer.sortOrder": "filesFirst",
+  "workbench.tree.indent": 16,
+  "window.commandCenter": false,
+  "[svelte]": {
+    "editor.defaultFormatter": "svelte.svelte-vscode"
+  },
+  "window.zoomLevel": -1,
+  "[python]": {
+    "editor.formatOnType": true
+  },
+  "editor.stickyScroll.enabled": true,
+  "codeium.enableConfig": {
+    "*": true,
+    "shellscript": false
+  }
+}
