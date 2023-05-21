@@ -150,7 +150,7 @@ gcp() {
 ipsum() {
     test $1 && P=$1 || P=5
     test $2 && S=$2 || S=3
-    curl --silent http://metaphorpsum.com/paragraphs/${P}/${S} | pbcopy
+    curl --silent http://metaphorpsum.com/paragraphs/${P}/${S} | tee | pbcopy
   }
 more () {
 	if (( ${+commands[bat]} )); then
