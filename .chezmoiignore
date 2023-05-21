@@ -2,12 +2,13 @@ Sync
 tmp
 
 {{- if ne .chezmoi.hostname "chimera" }}
-# ignore these files on hosts != chimera
+# only chimera gets these files
 .gnupg
 {{- end }}
 
 {{- if ne .chezmoi.os "darwin" }}
-# ignore these files on os != darwin
+# only darwin hosts get these files
 Library
+.config/wezterm/
 {{- end }}
 

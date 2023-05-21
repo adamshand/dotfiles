@@ -1,0 +1,39 @@
+# For a complete introduction, visit the official docs at: https://espanso.org/docs/
+
+matches:
+  # Simple text replacement
+  - trigger: ":espanso"
+    replace: "Hi there!"
+
+  # Print the current date
+  - trigger: ":sdate"
+    replace: "{{mydate}}"
+    vars:
+      - name: mydate
+        type: date
+        params:
+          format: "%Y-%m-%d"
+
+  - trigger: ":date"
+    replace: "{{myldate}}"
+    vars:
+      - name: mydate
+        type: date
+        params:
+          format: "%d %B %Y"
+
+  - trigger: ":ip"
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: shell
+        params:
+          cmd: "dig -4 +short myip.opendns.com a @resolver1.opendns.com"
+
+  - trigger: ":quote"
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: shell
+        params:
+          cmd: "links -dump -width 512 http://adam.nz/quotes/ | sort -R | head -1"
