@@ -1,0 +1,51 @@
+user-domain=wetafx.co.nz
+smtp-server=smtp.wetafx.co.nz
+nntp-server=news.wetafx.co.nz
+
+# Examples ...
+#inbox-path={localhost/ssl/novalidate-cert}INBOX
+#inbox-path={localhost/nossl}INBOX
+#folder-collections=Main {localhost}[], Inbox {localhost}INBOX.[], Saved {localhost}Saved.[]
+
+inbox-path={imap.wetafx.co.nz/nossl}INBOX
+default-fcc={imap.wetafx.co.nz/nossl}Sent
+default-saved-msg-folder={imap.wetafx.co.nz/nossl}INBOX
+postponed-folder={imap.wetafx.co.nz/nossl}Drafts
+folder-collections=Main {imap.wetafx.co.nz/ssl/novalidate-cert}[], Inbox {imap.wetafx.co.nz/ssl/novalidate-cert}INBOX.[], Saved {imap.wetafx.co.nz/ssl/novalidate-cert}Saved.[],Sent {imap.wetafx.co.nz/ssl/novalidate-cert}Sent.[]
+
+feature-list=delete-skips-deleted,
+        enable-aggregate-command-set,
+        enable-bounce-cmd,
+        enable-full-header-cmd,
+        enable-newmail-in-xterm-icon,
+        enable-tab-completion,
+        enable-unix-pipe-cmd,
+        include-text-in-reply,
+        quit-without-confirm,
+        save-will-advance,
+        enable-jump-shortcut,
+        expanded-view-of-folders,
+        enable-alternate-editor-cmd,
+        enable-goto-in-file-browser,
+        enable-mail-check-cue,
+        include-attachments-in-reply,
+        enable-background-sending,
+        delete-skips-deleted,
+        allow-changing-from,
+        expanded-view-of-folders,
+        enable-search-and-replace,
+        enable-verbose-smtp-posting,
+        enable-suspend,
+        disable-keymenu
+
+speller=aspell --mode=email check
+#display-filters=_BEGINNING("-----BEGIN PGP ")_ /usr/bin/topal -display _TMPFILE_ _RESULTFILE_
+#sending-filters=/usr/bin/topal -send _TMPFILE_ _RESULTFILE_ _RECIPIENTS_
+
+sort-key=Arrival/Reverse
+saved-msg-name-rule=last-folder-used
+
+editor=vim
+
+# fixed joel's issue with failed initial login
+rsh-open-timeout=0
