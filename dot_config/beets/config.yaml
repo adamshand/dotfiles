@@ -1,0 +1,38 @@
+directory: /media/music
+library: /media/music_beets.db
+
+paths:
+    default: $albumartist/$album%aunique{}/$track $title
+    singleton: Singletons/$artist/$title
+    comp: Compilations/$album%aunique{}/$track $title
+    albumtype:soundtrack: Soundtracks/$album/$track $title
+
+import:
+    log: /media/music_beets.log
+
+    move: yes
+    #copy: yes
+    write: yes
+
+    # discard existing metadata when match is made
+    from_scratch: yes
+    none_rec_action: ask
+
+original_date: yes
+
+# for multi-disk albums does each disk start at track 1
+per_disc_numbering: no
+
+# files matching these patterns are deleted from source after import
+clutter: ["Thumbs.DB", ".DS_Store", "._*", "*.m3u", ".pls", "*.jpg", "*.nfo"]
+
+# files/directories matching one of these patterns are ignored during import
+ignore: [".*", "*~", "System Volume Information", "lost+found"]
+
+plugins: fetchart missing lastgenre fromfilename lyrics
+
+lyrics:
+    auto: no
+
+#discogs: 
+#    user_token: JtiXMYmMAGtwvGosSCGkgtKGSlDKIrHlaQbtAZIz
