@@ -46,7 +46,7 @@ if [ "${OSTYPE:0:6}" = "darwin" ]; then
 	test $DEBUG && echo "DETECTED: darwin"
 	DARWIN="yes"
 
-	export PATH="${HOME}/bin/darwin:/opt/homebrew/sbin:/opt/homebrew/bin:${PATH}:/Library/Developer/CommandLineTools/usr/bin:/Users/adam/Library/Python/3.10/bin"
+	export PATH="${HOME}/bin/darwin:/opt/homebrew/bin:${PATH}:/Library/Developer/CommandLineTools/usr/bin:${HOME}:/Library/Python/3.10/bin"
 	export MANPATH="${MANPATH}:/usr/share/man"
 	export HOMEBREW_CASK_OPTS="--appdir=~/Applications"
   export HOMEBREW_AUTO_UPDATE_SECS=86400  # only update once a day
