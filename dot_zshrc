@@ -61,6 +61,12 @@ if [ "${OSTYPE:0:6}" = "darwin" ]; then
 	alias top="top -o cpu -O vsize"
 	alias updatedb="sudo -b /usr/libexec/locate.updatedb"
 
+  if [ -x /opt/homebrew/bin/nano ]; then¬
+    alias nano='nano -EGilxz -T2'
+  else 
+    unalias nano
+  fi
+
 elif [[ "$OSTYPE" = "linux-gnu" || "$OSTYPE" = "linux" ]]; then
 	test $DEBUG && echo "DETECTED: linux"
 	LINUX="yes"
@@ -91,9 +97,9 @@ alias egrep='egrep --color=auto'
 alias grep='grep --color=auto'
 alias mv='mv -vi'
 alias mkroot="sudo -E zsh"
-alias nano='nano -xz'
 alias pico='nano'
-alias genpw='bw generate -cp --words 2 --separator . --includeNumber'
+alias pwgen='bw generate -cp --words 2 --separator . --includeNumber'
+
 
 mcd() { mkdir -p $1 && cd $1; }
 
