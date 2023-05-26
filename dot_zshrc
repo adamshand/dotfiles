@@ -103,7 +103,7 @@ pass() {
 cm() { chezmoi $*; }
 cma() { chezmoi add $*; }
 cme() { chezmoi edit $*; }
-cmi() { chezmoi edit ~/.local/share/chezmoi/.chezmoiignore; }
+cmi() { nano ~/.local/share/chezmoi/.chezmoiignore; }
 cmu() { chezmoi update $*; }
 
 dps()   { docker ps --format "table {{.Names}}\t {{.Size}}\t {{.Status}}\t {{.Ports}}" | sed -e 's/0.0.0.0://g' -e 's/, :::[0-9]*->[0-9]*\/[tu][cd][p]//g'; }
