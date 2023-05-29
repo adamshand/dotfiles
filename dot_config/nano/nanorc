@@ -1,0 +1,88 @@
+set autoindent
+set afterends
+set backup
+set backupdir ~/.config/nano/backups
+#set constantshow
+#set guidestripe 80
+#set indicator                          # doesn't work on plimsoll
+#set stripecolor xx
+set linenumbers
+set numbercolor black,white
+#set mouse
+set positionlog
+#set regex
+set tabsize 2
+set tabstospaces
+set trimblanks
+
+#bind ^Z suspend main
+
+include ~/.config/nano/syntax/Dockerfile.nanorc
+include ~/.config/nano/syntax/apacheconf.nanorc
+include ~/.config/nano/syntax/asciidoc.nanorc
+include ~/.config/nano/syntax/awk.nanorc
+include ~/.config/nano/syntax/c.nanorc
+include ~/.config/nano/syntax/clojure.nanorc
+include ~/.config/nano/syntax/creole.nanorc
+include ~/.config/nano/syntax/csh.nanorc
+include ~/.config/nano/syntax/csharp.nanorc
+include ~/.config/nano/syntax/css.nanorc
+include ~/.config/nano/syntax/csv.nanorc
+include ~/.config/nano/syntax/cython.nanorc
+include ~/.config/nano/syntax/dot.nanorc
+include ~/.config/nano/syntax/dotenv.nanorc
+include ~/.config/nano/syntax/email.nanorc
+include ~/.config/nano/syntax/etc-hosts.nanorc
+include ~/.config/nano/syntax/fish.nanorc
+include ~/.config/nano/syntax/git.nanorc
+include ~/.config/nano/syntax/gitcommit.nanorc
+include ~/.config/nano/syntax/glsl.nanorc
+include ~/.config/nano/syntax/go.nanorc
+include ~/.config/nano/syntax/html.j2.nanorc
+include ~/.config/nano/syntax/html.nanorc
+include ~/.config/nano/syntax/i3.nanorc
+include ~/.config/nano/syntax/ical.nanorc
+include ~/.config/nano/syntax/ini.nanorc
+include ~/.config/nano/syntax/inputrc.nanorc
+include ~/.config/nano/syntax/java.nanorc
+include ~/.config/nano/syntax/javascript.nanorc
+include ~/.config/nano/syntax/js.nanorc
+include ~/.config/nano/syntax/json.nanorc
+include ~/.config/nano/syntax/kickstart.nanorc
+include ~/.config/nano/syntax/lua.nanorc
+include ~/.config/nano/syntax/makefile.nanorc
+include ~/.config/nano/syntax/man.nanorc
+include ~/.config/nano/syntax/markdown.nanorc
+include ~/.config/nano/syntax/nanorc.nanorc
+include ~/.config/nano/syntax/nginx.nanorc
+include ~/.config/nano/syntax/nmap.nanorc
+include ~/.config/nano/syntax/patch.nanorc
+include ~/.config/nano/syntax/perl.nanorc
+include ~/.config/nano/syntax/perl6.nanorc
+include ~/.config/nano/syntax/php.nanorc
+include ~/.config/nano/syntax/powershell.nanorc
+include ~/.config/nano/syntax/properties.nanorc
+include ~/.config/nano/syntax/puppet.nanorc
+include ~/.config/nano/syntax/python.nanorc
+include ~/.config/nano/syntax/reST.nanorc
+include ~/.config/nano/syntax/rpmspec.nanorc
+include ~/.config/nano/syntax/ruby.nanorc
+include ~/.config/nano/syntax/rust.nanorc
+include ~/.config/nano/syntax/sed.nanorc
+include ~/.config/nano/syntax/sh.nanorc
+include ~/.config/nano/syntax/sieve.nanorc
+include ~/.config/nano/syntax/sql.nanorc
+include ~/.config/nano/syntax/svn.nanorc
+include ~/.config/nano/syntax/swift.nanorc
+include ~/.config/nano/syntax/systemd.nanorc
+include ~/.config/nano/syntax/toml.nanorc
+include ~/.config/nano/syntax/ts.nanorc
+include ~/.config/nano/syntax/twig.nanorc
+include ~/.config/nano/syntax/vi.nanorc
+include ~/.config/nano/syntax/x11basic.nanorc
+include ~/.config/nano/syntax/xml.nanorc
+include ~/.config/nano/syntax/xresources.nanorc
+include ~/.config/nano/syntax/yaml.nanorc
+include ~/.config/nano/syntax/yum.nanorc
+include ~/.config/nano/syntax/zsh.nanorc
+include ~/.config/nano/syntax/zshrc.nanorc
