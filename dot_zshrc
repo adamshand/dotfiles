@@ -42,6 +42,9 @@ bindkey '^[w'     kill-word                 # opt-w to delete forward word
 export SUDO_PROMPT="Sudo Password: "
 export BC_ENV_ARGS="$HOME/.bc"
 
+# too tired to deal with this properly (it'll do pig)
+alias nano='nano -EGilxz -T2'
+
 if [ "${OSTYPE:0:6}" = "darwin" ]; then
 	test $DEBUG && echo "DETECTED: darwin"
 	DARWIN="yes"
@@ -61,9 +64,7 @@ if [ "${OSTYPE:0:6}" = "darwin" ]; then
 	alias top="top -o cpu -O vsize"
 	alias updatedb="sudo -b /usr/libexec/locate.updatedb"
 
-  if [ -x /opt/homebrew/bin/nano ]; then¬
-    alias nano='nano -EGilxz -T2'
-  else 
+  if [ ! -x /opt/homebrew/bin/nano ]; then
     unalias nano
   fi
 
@@ -100,7 +101,6 @@ alias mkroot="sudo -E zsh"
 alias pico='nano'
 alias pwgen='bw generate -cp --words 2 --separator . --includeNumber'
 
-
 mcd() { mkdir -p $1 && cd $1; }
 
 pass() {
@@ -109,7 +109,6 @@ pass() {
 cm() { chezmoi $*; }
 cma() { chezmoi add $*; }
 cme() { chezmoi edit $*; }
-cmg() { chezmoi git $*; }
 cmi() { nano ~/.local/share/chezmoi/.chezmoiignore; }
 cmu() { chezmoi update $*; }
 
