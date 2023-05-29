@@ -1,0 +1,59 @@
+[core]
+  excludesfile = /Users/adam/.gitignore_global
+  editor = nano
+
+[user]
+  name = Adam Shand
+  email = adam@shand.net
+
+[alias]
+  lol = log --graph --decorate --pretty=oneline --abbrev-commit --all
+  mylog = log --pretty=format:'%h %s [%an]' --graph
+  s = status
+  st = stage
+  sw = switch
+  co = checkout
+  ci = commit
+  br = branch
+  cm = commit -m
+  ca = commit --amend
+  cam = commit -a -m
+
+[init]
+  defaultBranch = main
+
+[diff]
+  tool = vimdiff
+
+[difftool]
+  prompt = false
+
+#[pager]
+#  diff = delta
+#  log = delta
+#  reflog = delta
+#  show = delta
+
+#[delta]
+#  features = side-by-side line-numbers 
+#  navigate = true
+#  syntax-theme = Nord
+#  line-numbers = true
+#  side-by-side = true
+#  #syntax-theme = Monokai Extended
+#  #plus-style = syntax "#003800"
+#  #minus-style = syntax "#3f0001"
+#  #plus-style = "syntax #012800"
+#  #minus-style = "syntax #340001"
+
+#[interactive]
+#  diffFilter = delta --color-only
+
+[color]
+  ui = true
+
+[pull]
+  rebase = false
+
+[push]
+  autoSetupRemote = true
