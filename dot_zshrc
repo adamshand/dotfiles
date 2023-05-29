@@ -42,9 +42,6 @@ bindkey '^[w'     kill-word                 # opt-w to delete forward word
 export SUDO_PROMPT="Sudo Password: "
 export BC_ENV_ARGS="$HOME/.bc"
 
-# too tired to deal with this properly (it'll do pig)
-alias nano='nano -EGilxz -T2'
-
 if [ "${OSTYPE:0:6}" = "darwin" ]; then
 	test $DEBUG && echo "DETECTED: darwin"
 	DARWIN="yes"
@@ -63,10 +60,6 @@ if [ "${OSTYPE:0:6}" = "darwin" ]; then
 	alias mkdir='mkdir -p'
 	alias top="top -o cpu -O vsize"
 	alias updatedb="sudo -b /usr/libexec/locate.updatedb"
-
-  if [ ! -x /opt/homebrew/bin/nano ]; then
-    unalias nano
-  fi
 
 elif [[ "$OSTYPE" = "linux-gnu" || "$OSTYPE" = "linux" ]]; then
 	test $DEBUG && echo "DETECTED: linux"
@@ -99,6 +92,7 @@ alias grep='grep --color=auto'
 alias mv='mv -vi'
 alias mkroot="sudo -E zsh"
 alias pico='nano'
+#alias nano='nano -EGilxz -T2'
 alias pwgen='bw generate -cp --words 2 --separator . --includeNumber'
 
 mcd() { mkdir -p $1 && cd $1; }
