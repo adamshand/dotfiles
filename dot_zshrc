@@ -109,6 +109,7 @@ pass() {
 cm() { chezmoi $*; }
 cma() { chezmoi add $*; }
 cme() { chezmoi edit $*; }
+cmg() { chezmoi git $*; }
 cmi() { nano ~/.local/share/chezmoi/.chezmoiignore; }
 cmu() { chezmoi update $*; }
 
