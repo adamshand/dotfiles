@@ -32,7 +32,7 @@ setopt CHECK_RUNNING_JOBS     # reminds you of suspended jobs when exiting
 # zle -al                                   # list all available actions
 # ctrl-w del-back-word, opt-w, del-forward-word, opt-arrow forward/back-word
 bindkey '^[[A'    up-line-or-search         # up arrow
-bindkey '^[[B'    down-line-or-search        # down arrow
+bindkey '^[[B'    down-line-or-search       # down arrow
 bindkey '\CI'     expand-or-complete-prefix # allows tab completiion in middle of word
 bindkey '\e[1;5D' backward-word             # ctrl-leftArrow move cursor back a word
 bindkey '\e[1;5C' forward-word              # ctrl-rightArrow move cursor forward a word
