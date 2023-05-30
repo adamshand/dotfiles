@@ -5,34 +5,34 @@ DEBUG=""
 test $DEBUG && echo "SHELL: $SHELL HOST: ${HOST%.*} OS: ${OSTYPE:0:6} "
 
 export PATH="${HOME}/bin/noarch:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin"
-export WORDCHARS="${WORDCHARS//\//}"	# / breaks a word
+export WORDCHARS="${WORDCHARS//\//}"  # / breaks a word
 
 export HISTFILE=~/.zhistory
-export HISTSIZE=100000				# the number of items for the internal history list
+export HISTSIZE=100000        # the number of items for the internal history list
 export SAVEHIST=100000
 
-setopt EXTENDED_HISTORY				# Write the history file in the ':start:elapsed;command' format.
-setopt INC_APPEND_HISTORY			# Write to the history file immediately, not when the shell exits.
-setopt SHARE_HISTORY					# Share history between all sessions.
-setopt HIST_EXPIRE_DUPS_FIRST	# Expire a duplicate event first when trimming history.
-setopt HIST_IGNORE_DUPS				# Do not record an event that was just recorded again.
-setopt HIST_IGNORE_ALL_DUPS		# Delete an old recorded event if a new event is a duplicate.
-setopt HIST_FIND_NO_DUPS			# Do not display a previously found event.
-setopt HIST_SAVE_NO_DUPS			# Do not write a duplicate event to the history file.
-setopt HIST_VERIFY					  # Do not execute immediately upon history expansion.
-setopt APPEND_HISTORY				  # Append to history file
+setopt EXTENDED_HISTORY       # Write the history file in the ':start:elapsed;command' format.
+setopt INC_APPEND_HISTORY     # Write to the history file immediately, not when the shell exits.
+setopt SHARE_HISTORY          # Share history between all sessions.
+setopt HIST_EXPIRE_DUPS_FIRST # Expire a duplicate event first when trimming history.
+setopt HIST_IGNORE_DUPS       # Do not record an event that was just recorded again.
+setopt HIST_IGNORE_ALL_DUPS   # Delete an old recorded event if a new event is a duplicate.
+setopt HIST_FIND_NO_DUPS      # Do not display a previously found event.
+setopt HIST_SAVE_NO_DUPS      # Do not write a duplicate event to the history file.
+setopt HIST_VERIFY            # Do not execute immediately upon history expansion.
+setopt APPEND_HISTORY         # Append to history file
 
 # added by adam as experiments (see man zshoptions)
-setopt GLOB_STAR_SHORT				# allows **.yml and ***.yml
-setopt CHECK_JOBS					    # reminds you of background running jobs when exiting
-setopt CHECK_RUNNING_JOBS			# reminds you of suspended jobs when exiting
-setopt LIST_TYPES					    # show identifying character at end of possible tab completions
-setopt EXTENDED_GLOB				  # ls -ld ansible*~*docker*; ls **/*(-@)
+setopt GLOB_STAR_SHORT        # allows **.yml and ***.yml
+setopt CHECK_JOBS             # reminds you of background running jobs when exiting
+setopt CHECK_RUNNING_JOBS     # reminds you of suspended jobs when exiting
+#setopt LIST_TYPES            # show identifying character at end of possible tab completions
+#setopt EXTENDED_GLOB         # ls -ld ansible*~*docker*; ls **/*(-@)
 
-# zle -al                                # list all available actions
+# zle -al                                   # list all available actions
 # ctrl-w del-back-word, opt-w, del-forward-word, opt-arrow forward/back-word
-bindkey '^[[A'    up-line-or-search 	      # up arrow
-bindkey '^[[B'    down-line-or-search	      # down arrow
+bindkey '^[[A'    up-line-or-search         # up arrow
+bindkey '^[[B'    down-line-or-search        # down arrow
 bindkey '\CI'     expand-or-complete-prefix # allows tab completiion in middle of word
 bindkey '\e[1;5D' backward-word             # ctrl-leftArrow move cursor back a word
 bindkey '\e[1;5C' forward-word              # ctrl-rightArrow move cursor forward a word
@@ -43,50 +43,51 @@ export SUDO_PROMPT="Sudo Password: "
 export BC_ENV_ARGS="$HOME/.bc"
 
 if [ "${OSTYPE:0:6}" = "darwin" ]; then
-	test $DEBUG && echo "DETECTED: darwin"
-	DARWIN="yes"
+  test $DEBUG && echo "DETECTED: darwin"
+  DARWIN="yes"
 
-	export PATH="${HOME}/bin/darwin:/opt/homebrew/bin:${PATH}:/Library/Developer/CommandLineTools/usr/bin:${HOME}:/Library/Python/3.10/bin"
-	export MANPATH="${MANPATH}:/usr/share/man"
-	export HOMEBREW_CASK_OPTS="--appdir=~/Applications"
+  export PATH="${HOME}/bin/darwin:/opt/homebrew/bin:${PATH}:/Library/Developer/CommandLineTools/usr/bin:${HOME}:/Library/Python/3.10/bin"
+  #export MANPATH="${MANPATH}:/usr/share/man"
+  export HOMEBREW_CASK_OPTS="--appdir=~/Applications"
   export HOMEBREW_AUTO_UPDATE_SECS=86400  # only update once a day
 
-	PSARG="auxww";
-	LARG="-lhPO"
+  PSARG="auxww";
+  LARG="-lhPO"
 
-	alias airport="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport"
-	alias cpdir="pwd | pbcopy"
-	alias flushdns="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
-	alias mkdir='mkdir -p'
-	alias top="top -o cpu -O vsize"
-	alias updatedb="sudo -b /usr/libexec/locate.updatedb"
+  alias airport="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport"
+  alias cpdir="pwd | pbcopy"
+  alias flushdns="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
+  alias mkdir='mkdir -p'
+  alias top="top -o cpu -O vsize"
+  alias updatedb="sudo -b /usr/libexec/locate.updatedb"
 
 elif [[ "$OSTYPE" = "linux-gnu" || "$OSTYPE" = "linux" ]]; then
-	test $DEBUG && echo "DETECTED: linux"
-	LINUX="yes"
+  test $DEBUG && echo "DETECTED: linux"
+  LINUX="yes"
 
-	export PATH="${HOME}/bin/linux:${PATH}:/usr/X11R6/bin:${HOME}/.local/bin"
-	export MANPATH="${MANPATH}:/usr/share/man:/usr/X11R6/man"
+  export PATH="${HOME}/bin/linux:${PATH}:/usr/X11R6/bin:${HOME}/.local/bin"
+  export MANPATH="${MANPATH}:/usr/share/man:/usr/X11R6/man"
 
-	PSARG="-efww"
-	LARG="-lh"
+  PSARG="-efww"
+  LARG="-lh"
 
-	sentry () {
-	  if (( ${+commands[sentry.pl]} )); then
-	    sudo ${commands[sentry.pl]} $*
+  sentry () {
+    if (( ${+commands[sentry.pl]} )); then
+      sudo ${commands[sentry.pl]} $*
     fi; }
 
-	#test -z $DISPLAY && export DISPLAY="localhost:0.0"
-	if [ -f /etc/debian_version ]; then
-		export LESSOPEN="|/usr/bin/lesspipe %s";
-		export LESSCLOSE="/usr/bin/lesspipe %s %s";
-	elif [ -f /etc/redhat-release ]; then
-		eval $(lesspipe.sh)
-	fi
+  #test -z $DISPLAY && export DISPLAY="localhost:0.0"
+  if [ -f /etc/debian_version ]; then
+    export LESSOPEN="|/usr/bin/lesspipe %s";
+    export LESSCLOSE="/usr/bin/lesspipe %s %s";
+  elif [ -f /etc/redhat-release ]; then
+    eval $(lesspipe.sh)
+  fi
 fi # end os specific
 
 # Generic alias above so OS specific overrides
 alias cp='cp -vi'
+alias edpro="cme ~/.zshrc && cm apply && exec zsh"
 alias egrep='egrep --color=auto'
 alias grep='grep --color=auto'
 alias mv='mv -vi'
@@ -138,31 +139,31 @@ dcdu()  { dcd && $DC up -d && dcl; }
 flaunt() { egrep "($1|$)"; }        # highlight matches without filtering
 
 gcp() {
-	git status -s;
-	echo -n "Commit message: ";
-	read MSG && \
-	git pull;
-	git commit -a -m "gcp: $MSG" && \
-	git push; }
+  git status -s;
+  echo -n "Commit message: ";
+  read MSG && \
+  git pull;
+  git commit -a -m "gcp: $MSG" && \
+  git push; }
 ipsum() {
     test $1 && P=$1 || P=5
     test $2 && S=$2 || S=3
-    curl --silent http://metaphorpsum.com/paragraphs/${P}/${S} | pbcopy
+    curl --silent http://metaphorpsum.com/paragraphs/${P}/${S} | tee >(pbcopy)
   }
 more () {
-	if (( ${+commands[bat]} )); then
-		bat $*
-	elif (( ${+commands[less]} )); then
-	    less -iw $*
-	else
-	    more $*
-	fi; }
+  if (( ${+commands[bat]} )); then
+    bat $*
+  elif (( ${+commands[less]} )); then
+      less -iw $*
+  else
+      more $*
+  fi; }
 p() {
-	if [ ! $1 ]; then
-		ps ${PSARG}
-	else
-		ps ${PSARG} | grep -iE "[^]]${1}"
-	fi; }
+  if [ ! $1 ]; then
+    ps ${PSARG}
+  else
+    ps ${PSARG} | grep -iE "[^]]${1}"
+  fi; }
 showip() {
   # curl -4 ifconfig.co
   dig -4 +short myip.opendns.com a @resolver1.opendns.com
@@ -173,8 +174,8 @@ if (( ${+commands[ssh.sh]} )); then
 fi
 vade () { links -dump -width 512 http://adam.nz/vade/ | egrep -v '^ *\$' | egrep --color=auto -A2 "^ # .*${1}.*\$" ;}
 
-autoload -U zmv				# zmv '* *' '$f:gs/ /_'; more at: https://strcat.de/zsh/#zmv
-autoload -U tetris		 tetris
+autoload -U zmv           # zmv '* *' '$f:gs/ /_'; more at: https://strcat.de/zsh/#zmv
+autoload -U tetris tetris
 
 if (( ${+commands[exa]} )); then
     alias l='exa -lgh --group --group-directories-first --time-style=long-iso --colour-scale'
@@ -187,8 +188,6 @@ fi
 if [[ "${HOST%.*}" = "chimera" ]]; then
   test $DEBUG && echo "DETECTED: chimera"
   PATH=${PATH}:/Users/adam/Library/Python/3.9/bin
-
-  alias edpro="cme ~/.zshrc && cm apply && exec zsh"
 
   export NVM_DIR="${HOME}/.nvm"
   export PNPM_HOME="${HOME}/Library/pnpm"
@@ -222,7 +221,7 @@ if (( ${+commands[git]} )); then
   #zcomet load supercrabtree/k          # ls with git information
   #zcomet load agkozak/zsh-z            # smart cd
   #zcomet load ohmyzsh plugins/gitfast  # can't remember
-  #zcomet load zpm-zsh/autoenv				  # auto run .in/.out when entering/exiting directory
+  #zcomet load zpm-zsh/autoenv          # auto run .in/.out when entering/exiting directory
 
   #zcomet snippet https://iterm2.com/shell_integration/zsh
   #zcomet snippet https://github.com/jreese/zsh-titles/blob/master/titles.plugin.zsh

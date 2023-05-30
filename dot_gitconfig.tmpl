@@ -1,6 +1,10 @@
 [core]
   excludesfile = /Users/adam/.gitignore_global
+  {{ if eq .chezmoi.os "darwin" }}
+  editor = code --wait
+  {{ else }}
   editor = nano
+  {{ end }}
 
 [user]
   name = Adam Shand
@@ -22,8 +26,22 @@
 [init]
   defaultBranch = main
 
+{{ if eq .chezmoi.os "darwin" }}
+[diff]
+  tool = vscode
+
+[difftool "vscode"]
+  cmd = code --wait --diff $LOCAL $REMOTE
+
+[merge]
+  tool = vscode
+
+[mergetool "vscode"]
+  cmd = code --wait $MERGED
+{{ else }}
 [diff]
   tool = vimdiff
+{{ end }}
 
 [difftool]
   prompt = false
@@ -35,7 +53,7 @@
 #  show = delta
 
 #[delta]
-#  features = side-by-side line-numbers 
+#  features = side-by-side line-numbers
 #  navigate = true
 #  syntax-theme = Nord
 #  line-numbers = true
