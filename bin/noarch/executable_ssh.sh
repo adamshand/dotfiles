@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# TODO: add support for ssh'ing to a directory: 
-#       wezterm cli spawn ssh -t mahoe "cd /srv/synapse; exec $SHELL -l"
-# or    wezterm ssh -o RequestTTY=yes -o RemoteCommand="cd /tmp; $SHELL -li" nikau.haume.nz
-
 # Wrapper to launch SSH in a new tab with correct variables for iTerm.app
 # Written by Adam Shand <adam@shand.net> on 27 April 2004
 # 20110305 added -4 -C -c blowfish-cbc by recommendation to speed up things
@@ -14,9 +10,9 @@
 # 20200513 add support for an ssh jumphost
 # 20230409 add support for opening in new WezTerm tab
 
-# script assumes that you have an alias in ~/.bash_profile
-# eg.    alias s='~/scripts/ssh.sh'
-
+## USAGE
+# add alias to bash/zsh start up scripts, eg: alias s='~/bin/ssh.sh'
+# or call manually as ssh.sh
 
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/opt/homebrew/bin
 #SSH_OPTIONS="-A -4C -e ^"
