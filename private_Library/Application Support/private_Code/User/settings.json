@@ -28,7 +28,6 @@
     "typescriptreact",
     "svelte"
   ],
-  "eslint.alwaysShowStatus": true,
   "eslint.format.enable": true,
   "eslint.nodePath": ".yarn/sdks",
   "diffEditor.codeLens": true,
@@ -68,7 +67,6 @@
     "editor.wordWrapColumn": 80
   },
   "svelte.enable-ts-plugin": true,
-  "svelte.plugin.svelte.note-new-transformation": false,
   "explorer.sortOrder": "filesFirst",
   "workbench.tree.indent": 16,
   "window.commandCenter": false,
@@ -80,8 +78,14 @@
     "editor.formatOnType": true
   },
   "editor.stickyScroll.enabled": true,
-  "codeium.enableConfig": {
+  "editor.inlineSuggest.enabled": true,
+  "github.copilot.enable": {
     "*": true,
-    "shellscript": false
+    "plaintext": false,
+    "markdown": true,
+    "scminput": false,
+    "typescript": true,
+    "javascript": true,
+    "svelte": true
   }
 }
