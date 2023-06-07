@@ -97,6 +97,7 @@ alias pico='nano'
 alias pwgen='bw generate -cp --words 2 --separator . --includeNumber'
 
 mcd() { mkdir -p $1 && cd $1; }
+smcd() { sudo mkdir -p $1 && sudo chown -R adam $1&& cd $1; }
 
 pass() {
   bw list items --search $* --pretty | egrep "(name|username|password)\":" | sed -e 's/^ *//' -e 's/^"//' -e 's/",$//' -e 's/": "/: /' -e 's/^name:/\nname:    /'}
