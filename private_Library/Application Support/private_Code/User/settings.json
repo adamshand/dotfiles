@@ -73,7 +73,6 @@
   "[svelte]": {
     "editor.defaultFormatter": "svelte.svelte-vscode"
   },
-  "window.zoomLevel": -1,
   "[python]": {
     "editor.formatOnType": true
   },
@@ -87,5 +86,9 @@
     "typescript": true,
     "javascript": true,
     "svelte": true
-  }
+  },
+  "terminal.integrated.env.osx": {
+    "FIG_NEW_SESSION": "1"
+  },
+  "window.zoomLevel": -1
 }

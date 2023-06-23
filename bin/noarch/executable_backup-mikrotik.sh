@@ -7,5 +7,5 @@ TODAY="$(date +%a)"
 SSH_KEY="~adam/.ssh/id_rsa"
 
 for router in $MIKROTIK; do
-  ssh -v -i $SSH_KEY adam@${router} export > ${FOLDER}/${router}-${TODAY}.txt
+  ssh -i $SSH_KEY adam@${router} export > ${FOLDER}/${router}-${TODAY}.txt
 done
