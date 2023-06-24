@@ -94,7 +94,7 @@ alias mv='mv -vi'
 alias mkroot="sudo -E zsh"
 alias pico='nano'
 #alias nano='nano -EGilxz -T2'
-alias pwgen='bw generate -cp --words 2 --separator . --includeNumber'
+alias pwgen='bw generate -cp --words 2 --separator . --includeNumber | tee >(pbcopy)'
 
 mcd() { mkdir -p $1 && cd $1; }
 smcd() { sudo mkdir -p $1 && sudo chown -R adam $1&& cd $1; }
