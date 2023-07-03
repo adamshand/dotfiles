@@ -1,8 +1,9 @@
-# change C-a to C-b
+# change C-a to C-b/ ctrl-b d to detach
+
 escape ^Bb
 
 autodetach on
-startup_message off 
+startup_message on
 #defscrollback 5000
 
 hardstatus alwayslastline
