@@ -54,6 +54,10 @@ if [ "${OSTYPE:0:6}" = "darwin" ]; then
   PSARG="auxww";
   LARG="-lhPO"
 
+  if [ -r "${HOME}/.env" ];
+    export CF_API_TOKEN=$(awk -F= '/^CF_API_TOKEN=/{print $2}' ~/.env) 
+  fi
+
   alias airport="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport"
   alias cpdir="pwd | pbcopy"
   alias flushdns="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
