@@ -54,7 +54,7 @@ if [ "${OSTYPE:0:6}" = "darwin" ]; then
   PSARG="auxww";
   LARG="-lhPO"
 
-  if [ -r "${HOME}/.env" ];
+  if [ -r "${HOME}/.env" ]; then
     export CF_API_TOKEN=$(awk -F= '/^CF_API_TOKEN=/{print $2}' ~/.env) 
   fi
 
