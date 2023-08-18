@@ -13,7 +13,7 @@ export SAVEHIST=100000
 
 setopt EXTENDED_HISTORY       # Write the history file in the ':start:elapsed;command' format.
 setopt INC_APPEND_HISTORY     # Write to the history file immediately, not when the shell exits.
-setopt SHARE_HISTORY          # Share history between all sessions.
+# setopt SHARE_HISTORY          # Share history between all sessions.
 setopt HIST_EXPIRE_DUPS_FIRST # Expire a duplicate event first when trimming history.
 setopt HIST_IGNORE_DUPS       # Do not record an event that was just recorded again.
 setopt HIST_IGNORE_ALL_DUPS   # Delete an old recorded event if a new event is a duplicate.
@@ -30,7 +30,7 @@ setopt CHECK_RUNNING_JOBS     # reminds you of suspended jobs when exiting
 #setopt EXTENDED_GLOB         # ls -ld ansible*~*docker*; ls **/*(-@)
 
 # zle -al                                   # list all available actions
-# ctrl-w del-back-word, opt-w, del-forward-word, opt-arrow forward/back-word
+# ctrl-w:del-back-word, opt-w:del-forward-word, ctrl-arrow:forward/back-word
 bindkey '^[[A'    up-line-or-search         # up arrow
 bindkey '^[[B'    down-line-or-search       # down arrow
 bindkey '\CI'     expand-or-complete-prefix # allows tab completiion in middle of word
@@ -46,10 +46,16 @@ if [ "${OSTYPE:0:6}" = "darwin" ]; then
   test $DEBUG && echo "DETECTED: darwin"
   DARWIN="yes"
 
-  export PATH="${HOME}/bin/darwin:/opt/homebrew/bin:${PATH}:/Library/Developer/CommandLineTools/usr/bin:${HOME}:/Library/Python/3.10/bin"
+  # do i ever use this? /Library/Developer/CommandLineTools/usr/bin
+  export PATH="${HOME}/bin/darwin:/opt/homebrew/bin:${PATH}"
+
+  # needs to come after PATH gets /opt/homebrew/bin
+  PYVER=$(python3 --version | awk -F'[ .]' '{print $2"."$3}')
+  export PATH="${PATH}:${HOME}/Library/Python/${PYVER}/bin"
+
   #export MANPATH="${MANPATH}:/usr/share/man"
-  export HOMEBREW_CASK_OPTS="--appdir=~/Applications"
-  export HOMEBREW_AUTO_UPDATE_SECS=86400  # only update once a day
+  # export HOMEBREW_CASK_OPTS="--appdir=~/Applications"
+  # export HOMEBREW_AUTO_UPDATE_SECS=86400  # only update once a day
 
   PSARG="auxww";
   LARG="-lhPO"
@@ -89,7 +95,6 @@ elif [[ "$OSTYPE" = "linux-gnu" || "$OSTYPE" = "linux" ]]; then
   fi
 fi # end os specific
 
-# Generic alias above so OS specific overrides
 alias cp='cp -vi'
 alias edpro="cme ~/.zshrc && cm apply && exec zsh"
 alias egrep='egrep --color=auto'
@@ -106,12 +111,17 @@ smcd() { sudo mkdir -p $1 && sudo chown -R adam $1&& cd $1; }
 pass() {
   bw list items --search $* --pretty | egrep "(name|username|password)\":" | sed -e 's/^ *//' -e 's/^"//' -e 's/",$//' -e 's/": "/: /' -e 's/^name:/\nname:    /'}
 
-cm() { chezmoi $*; }
-cma() { chezmoi add $*; }
-cme() { chezmoi edit $*; }
-cmg() { chezmoi git $*; }
-cmi() { nano ~/.local/share/chezmoi/.chezmoiignore; }
-cmu() { chezmoi update -v $*; }
+cm()      { chezmoi $*; }
+cma()     { chezmoi add $*; }         # add file to chezmoi
+cmd()     { chezmoi diff $*; }        # diff chezmoi with $HOME
+cme()     { chezmoi edit $*; }
+cmf()     { chezmoi forget $*; }      # stop tracking file in chezmoi
+cmg()     { chezmoi git $*; }
+cmi()     { nano ~/.local/share/chezmoi/.chezmoiignore; }
+cminit()  { echo 'chezmoi init sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply adamshand -b "$HOME/bin/linux/" --ssh --purge-binary'; }
+cmst()    { chezmoi status $*; }      # show status of chezmoi
+cmu()     { chezmoi update $*; }      # pull updates from git and update $HOME from chezmoi
+cmuv()    { chezmoi update -v $*; }  
 
 dps()   { docker ps --format "table {{.Names}}\t {{.Size}}\t {{.Status}}\t {{.Ports}}" | sed -e 's/0.0.0.0://g' -e 's/, :::[0-9]*->[0-9]*\/[tu][cd][p]//g'; }
 de()    {
@@ -140,7 +150,6 @@ dcd()   { $DC down; }
 dl()    { docker logs --follow --since=1m --timestamps $*; }
 dcl()   { docker-compose logs --follow --timestamps $*; }
 dcdu()  { dcd && $DC up -d && dcl; }
-
 flaunt() { egrep "($1|$)"; }        # highlight matches without filtering
 
 gcp() {
@@ -150,11 +159,13 @@ gcp() {
   git pull;
   git commit -a -m "gcp: $MSG" && \
   git push; }
+
 ipsum() {
     test $1 && P=$1 || P=5
     test $2 && S=$2 || S=3
     curl --silent http://metaphorpsum.com/paragraphs/${P}/${S} | tee >(pbcopy)
   }
+
 more () {
   if (( ${+commands[bat]} )); then
     bat $*
@@ -163,12 +174,14 @@ more () {
   else
       more $*
   fi; }
+
 p() {
   if [ ! $1 ]; then
     ps ${PSARG}
   else
     ps ${PSARG} | grep -iE "[^]]${1}"
   fi; }
+
 showip() {
   # curl -4 ifconfig.co
   dig -4 +short myip.opendns.com a @resolver1.opendns.com
