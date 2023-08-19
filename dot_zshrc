@@ -50,8 +50,9 @@ if [ "${OSTYPE:0:6}" = "darwin" ]; then
   export PATH="${HOME}/bin/darwin:/opt/homebrew/bin:${PATH}"
 
   # needs to come after PATH gets /opt/homebrew/bin
-  PYVER=$(python3 --version | awk -F'[ .]' '{print $2"."$3}')
-  export PATH="${PATH}:${HOME}/Library/Python/${PYVER}/bin"
+  PYPATH="${HOME}/Library/Python/$(python3 --version | awk -F'[ .]' '{print $2"."$3}')/bin"
+  test -d "${HOME}/Library/pnpm" && export PNPM_HOME="${HOME}/Library/pnpm"
+  export PATH="${PATH}:${PNPM_HOME}:${PYPATH}"
 
   #export MANPATH="${MANPATH}:/usr/share/man"
   # export HOMEBREW_CASK_OPTS="--appdir=~/Applications"
@@ -205,12 +206,6 @@ fi
 
 if [[ "${HOST%.*}" = "chimera" ]]; then
   test $DEBUG && echo "DETECTED: chimera"
-  PATH=${PATH}:/Users/adam/Library/Python/3.9/bin
-
-  export NVM_DIR="${HOME}/.nvm"
-  export PNPM_HOME="${HOME}/Library/pnpm"
-  export PATH="$PNPM_HOME:$PATH"
-  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
 
 elif [[ "${HOST%.*}" = "kauri" ]]; then
   export RESTIC_PASSWORD_FILE="/home/adam/etc/restic.txt"
