@@ -1,14 +1,25 @@
-// Zed settings
-//
-// For information on how to configure Zed, see the Zed
-// documentation: https://zed.dev/docs/configuring-zed
-//
-// To see all of Zed's default settings without changing your
-// custom settings, run the `open default settings` command
-// from the command palette or from `Zed` application menu.
+// https://zed.dev/docs/configuring-zed
+// CMD-SHIFT-P and `open default settings` for default settings
 {
-  "theme": "Gruvbox Dark Soft",
-  "buffer_font_size": 15,
+  "theme": "Gruvbox Dark",
+  "buffer_font_size": 18,
   "autosave": "on_focus_change",
-  "default_dock_anchor": "right"
+  "project_panel": {
+    "dock": "right"
+  },
+  "collaboration_panel": {
+    "dock": "right"
+  },
+  "assistant": {
+    "dock": "right"
+  },
+  "hard_tabs": true,
+  "tab_size": 2,
+  "preferred_line_length": 80,
+  "copy_on_select": true,
+  "font_family": "Recursive Mono Casual Static",
+  "tabs": {
+    "git_status": true,
+    "close_position": "right"
+  }
 }

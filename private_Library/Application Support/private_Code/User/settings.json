@@ -53,7 +53,7 @@
   "typescript.updateImportsOnFileMove.enabled": "always",
   "vsicons.dontShowNewVersionMessage": true,
   "window.title": "${activeEditorMedium}${separator}${rootName}",
-  "workbench.colorTheme": "Gruvbox Dark Hard",
+  "workbench.colorTheme": "poimandres-storm",
   "workbench.iconTheme": "vscode-icons",
   "workbench.sideBar.location": "right",
   "workbench.startupEditor": "none",
@@ -87,5 +87,6 @@
   },
   "terminal.integrated.env.osx": {
     "FIG_NEW_SESSION": "1"
-  }
+  },
+  "terminal.integrated.tabStopWidth": 4
 }
