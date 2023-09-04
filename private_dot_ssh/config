@@ -1,0 +1,54 @@
+Include /Users/adam/.colima/ssh_config
+Include config.inkfish
+
+# https://dotfiles.tnetconsulting.net/articles/2016/0109/ssh-canonicalization.html
+CanonicalizeHostname yes
+CanonicalizeFallbackLocal yes
+CanonicalDomains srv.krakenfleet.co haume.nz krakenfleet.co
+CanonicalizeMaxDots 1
+
+Host *.haume.nz *.krakenfleet.co *.srv.krakenfleet.co *.shmoo.com
+  ForwardAgent yes
+
+Host github.com *.github.com
+  CheckHostIP no
+
+Host odyssey odyssey-linux-matrix.tail77d75.ts.net
+  Hostname odyssey-linux-matrix.tail77d75.ts.net
+  ForwardAgent yes
+
+Match host "*.cf"
+  ProxyCommand /opt/homebrew/bin/cloudflared access ssh --hostname $(echo %h | sed 's/\.cf$/.haume.nz/')
+  ForwardAgent yes
+
+Host ssh.rv-odyssey.com
+  ProxyCommand /opt/homebrew/bin/cloudflared access ssh --hostname %h
+  ForwardAgent yes
+
+Host beam beam.gnosh.net
+  HostName beam.gnosh.net
+  User larry
+  ForwardAgent yes
+  HostKeyAlgorithms ssh-rsa
+  KexAlgorithms diffie-hellman-group14-sha1
+  MACs hmac-sha1-96
+
+Host sdf tty.sdf.org
+  HostName tty.sdf.org
+  User adamshand
+
+Host *
+  IgnoreUnknown UseKeychain # so Linux doesn't barf on UseKeychain
+  UseKeychain yes
+  AddKeysToAgent yes
+  ForwardX11 no
+  ForwardAgent no # this is annoying but good for security
+  Compression yes
+  CheckHostIP yes
+  StrictHostKeyChecking accept-new
+  VerifyHostKeyDNS yes
+  #VisualHostKey yes # nice idea but annoying
+  ControlMaster auto
+  ControlPath ~/.ssh/sockets/%r@%h:%p
+  ControlPersist 900
+
