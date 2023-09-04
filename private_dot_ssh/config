@@ -4,9 +4,9 @@ Include config.inkfish
 # https://dotfiles.tnetconsulting.net/articles/2016/0109/ssh-canonicalization.html
 CanonicalizeHostname yes
 CanonicalizeFallbackLocal yes
-CanonicalDomains srv.krakenfleet.co haume.nz krakenfleet.co
 CanonicalizeMaxDots 1
 
+CanonicalDomains srv.krakenfleet.co haume.nz krakenfleet.co shmoo.com
 Host *.haume.nz *.krakenfleet.co *.srv.krakenfleet.co *.shmoo.com
   ForwardAgent yes
 
