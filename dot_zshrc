@@ -119,7 +119,7 @@ cme()     { chezmoi edit $*; }
 cmf()     { chezmoi forget $*; }      # stop tracking file in chezmoi
 cmg()     { chezmoi git $*; }
 cmi()     { nano ~/.local/share/chezmoi/.chezmoiignore; }
-cminit()  { echo 'chezmoi init sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply adamshand -b "$HOME/bin/linux/" --ssh --purge-binary'; }
+cminit()  { sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply adamshand  --ssh --purge-binary; }
 cmst()    { chezmoi status $*; }      # show status of chezmoi
 cmu()     { chezmoi update $*; }      # pull updates from git and update $HOME from chezmoi
 cmuv()    { chezmoi update -v $*; }  
