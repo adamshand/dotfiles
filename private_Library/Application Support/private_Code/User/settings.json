@@ -5,15 +5,15 @@
   "editor.minimap.enabled": false,
   "editor.guides.bracketPairs": "active",
   "editor.bracketPairColorization.enabled": true,
-  "editor.fontFamily": "'Recursive Mono Casual Static','Operator Mono', 'Dank Mono','Gintronic', Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontFamily": "'Comic Code Ligatures','Recursive Mono Casual Static','Operator Mono', 'Dank Mono','Gintronic', Menlo, Monaco, 'Courier New', monospace",
   "editor.fontWeight": "200",
   "editor.fontSize": 18,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.hover.delay": 1500,
-  "editor.lightbulb.enabled": false,
+  "editor.lightbulb.enabled": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "editor.codeLens": true,
   "eslint.options": {
@@ -78,8 +78,8 @@
   "editor.inlineSuggest.enabled": true,
   "github.copilot.enable": {
     "*": true,
-    "plaintext": false,
-    "markdown": true,
+    "plaintext": true,
+    "markdown": false,
     "scminput": false,
     "typescript": true,
     "javascript": true,
@@ -88,5 +88,8 @@
   "terminal.integrated.env.osx": {
     "FIG_NEW_SESSION": "1"
   },
-  "terminal.integrated.tabStopWidth": 4
+  "terminal.integrated.tabStopWidth": 4,
+  "github.gitProtocol": "ssh",
+  "git.openRepositoryInParentFolders": "never",
+  "window.zoomLevel": -1
 }
