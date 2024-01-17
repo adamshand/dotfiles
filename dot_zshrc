@@ -197,9 +197,9 @@ vade () { links -dump -width 512 http://adam.nz/vade/ | egrep -v '^ *\$' | egrep
 autoload -U zmv           # zmv '* *' '$f:gs/ /_'; more at: https://strcat.de/zsh/#zmv
 autoload -U tetris tetris
 
-if (( ${+commands[exa]} )); then
-    alias l='exa -lgh --group --group-directories-first --time-style=long-iso --colour-scale'
-    alias ls='exa -Fg --group-directories-first --colour-scale'
+if (( ${+commands[eza]} )); then
+    alias l='eza -lgh --group --group-directories-first --time-style=long-iso --colour-scale'
+    alias ls='eza -Fg --group-directories-first --colour-scale'
 else;
     alias l='ls $LARG'
     alias ls='ls -F'
