@@ -30,6 +30,16 @@ if [ "$1" == "debug" ]; then
   echo "DEBUG: on" 1>&2
 fi
 
+if [ ! -d "$BACKUP_BASE" ]; then
+  if install -v -o root -g backup -m 0750 -d $BACKUP_BASE; then
+   echo "INFO: created $BACKUP_BASE" 1>&2
+  else 
+    echo "error: cannot create $BACKUP_BASE" 1>&2
+    exit 1
+  fi
+fi
+
+exit
 for volume in $(docker volume ls -q); do
     echo -e "\n## VOLUME: $volume"
     
