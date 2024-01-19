@@ -14,7 +14,7 @@ fi
 # sets final exit code as failure if any step in pipeline fails
 set -o pipefail
 if ! QUOTE=$(curl --silent --fail "$QUOTE_URL" | \
-    python3 -c "import html, sys; print(html.unescape(sys.stdin.read()))" | \
+    # decoding entites in api now #python3 -c "import html, sys; print(html.unescape(sys.stdin.read()))" | \
     fmt -w 80 | \
     boxes -p h2v1 -d stone -a r); then
   echo "error: downloading and formatting quote" 1>&2
