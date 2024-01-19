@@ -91,5 +91,6 @@
   "terminal.integrated.tabStopWidth": 4,
   "github.gitProtocol": "ssh",
   "git.openRepositoryInParentFolders": "never",
-  "window.zoomLevel": -1
+  "window.zoomLevel": -1,
+  "git.confirmSync": false
 }
