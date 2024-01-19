@@ -41,7 +41,7 @@ Host *
   StrictHostKeyChecking accept-new
   VerifyHostKeyDNS yes
   #VisualHostKey yes # nice idea but annoying
-  ControlMaster auto
-  ControlPath ~/.ssh/sockets/%r@%h:%p
-  ControlPersist 900
+  #ControlMaster auto
+  #ControlPath ~/.ssh/sockets/%r@%h:%p
+  #ControlPersist 900
 
