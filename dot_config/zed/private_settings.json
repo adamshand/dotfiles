@@ -2,24 +2,26 @@
 // CMD-SHIFT-P and `open default settings` for default settings
 {
   "theme": "Gruvbox Dark",
-  "buffer_font_size": 18,
+  "buffer_font_family": "Recursive Mono Casual Static",
+  "buffer_font_size": 16,
+  "copy_on_select": true,
   "autosave": "on_focus_change",
+  "format_on_save": "on",
+  "preferred_line_length": 80,
+  "hard_tabs": false,
+  "tab_size": 2,
+  "tabs": {
+    "git_status": true,
+    "close_position": "right"
+  },
   "project_panel": {
-    "dock": "right"
+    "dock": "right",
+    "git_status": true
   },
   "collaboration_panel": {
     "dock": "right"
   },
   "assistant": {
     "dock": "right"
-  },
-  "hard_tabs": true,
-  "tab_size": 2,
-  "preferred_line_length": 80,
-  "copy_on_select": true,
-  "font_family": "Recursive Mono Casual Static",
-  "tabs": {
-    "git_status": true,
-    "close_position": "right"
   }
 }
