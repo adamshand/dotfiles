@@ -243,7 +243,10 @@ if (( ${+commands[git]} )); then
   zcomet snippet https://github.com/wez/wezterm/blob/main/assets/shell-integration/wezterm.sh
 
   # Run compinit and compile its cache
-  zcomet compinit
+  if [[ $UID != 0 ]]; then
+    # gets rid of "insecure directories" error when running mkroot
+    zcomet compinit
+  fi
 
   ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#708090"
   #ZSH_AUTOSUGGEST_COMPLETION_IGNORE="git *"

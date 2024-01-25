@@ -9,7 +9,8 @@
 # 20200512 ssh to multiple hosts at once
 # 20200513 add support for an ssh jumphost
 # 20230409 add support for opening in new WezTerm tab
-
+#
+#
 ## USAGE
 # add alias to bash/zsh start up scripts, eg: alias s='~/bin/ssh.sh'
 # or call manually as ssh.sh
