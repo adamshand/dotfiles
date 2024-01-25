@@ -1,9 +1,11 @@
 #!/bin/bash
 
 # Backup and dumps sqlite databases, written by <adam@shand.net>
-# - 23-Feb-2023 initial version
-# - 25-Dec-2023 updated to automatically find SQLite databases in Docker Volumes
-
+# - 23 Feb 2023 initial version
+# - 25 Dec 2023 updated to automatically find SQLite databases in Docker Volumes
+# - 18 Jan 2024 will now automatically create $BACKUPBASE if required
+# - 25 Jan 2024 added check for sqlite3
+#
 # NOTES
 # - backs up all SQLite files found in the top two levels of a Docker Volume
 # - skips any files matching *deleteme*
@@ -25,9 +27,23 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
+if ! which sqlite3 > /dev/null; then
+  echo "error: please install sqlite command"
+  exit 1
+fi
+
 if [ "$1" == "debug" ]; then
   DEBUG="yes"
   echo "DEBUG: on" 1>&2
+fi
+
+if [ ! -d "$BACKUP_BASE" ]; then
+  if install -o root -g backup -m 0750 -d $BACKUP_BASE; then
+   echo "INFO: created $BACKUP_BASE" 1>&2
+  else 
+    echo "error: cannot create $BACKUP_BASE" 1>&2
+    exit 1
+  fi
 fi
 
 for volume in $(docker volume ls -q); do

@@ -1,5 +1,5 @@
 Include /Users/adam/.colima/ssh_config
-Include config.inkfish
+#Include config.inkfish
 
 # https://dotfiles.tnetconsulting.net/articles/2016/0109/ssh-canonicalization.html
 CanonicalizeHostname yes
@@ -41,7 +41,6 @@ Host *
   StrictHostKeyChecking accept-new
   VerifyHostKeyDNS yes
   #VisualHostKey yes # nice idea but annoying
-  ControlMaster auto
-  ControlPath ~/.ssh/sockets/%r@%h:%p
-  ControlPersist 900
-
+  #ControlMaster auto
+  #ControlPath ~/.ssh/sockets/%r@%h:%p
+  #ControlPersist 900
