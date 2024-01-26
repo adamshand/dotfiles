@@ -9,7 +9,7 @@ FILES=$(chezmoi status | awk '/^ / {print $2}')
 echo -e "\n## Updating files without local changes"
 
 for f in $FILES; do
-  echo "# $f"
+  echo "... $f"
   chezmoi apply ~/${f}
 done
 
