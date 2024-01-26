@@ -12,6 +12,7 @@
 
 # TODO
 # - add ability to back up arbitrary SQLite files ?
+# - automatically run in debug mode if file has been modified in last 48 hours
 
 umask 077   # root read only
 PATH=/sbin:/bin:/usr/sbin:/usr/bin

@@ -3,6 +3,9 @@
 # Written by Adam 24-Sep-20
 # Backs up all PostgreSQL, PostGIS, MySQL, MariaDB and Mongo databases
 # running within docker containers.
+#
+# TODO
+# - automatically run in debug mode if file has been modified in last 48 hours
 
 umask 077   # root read only
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
