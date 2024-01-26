@@ -14,4 +14,4 @@ for f in $FILES; do
 done
 
 echo -e "\n## Files with local changes that need adding"
-chezmoi status
+chezmoi status 1>&2
