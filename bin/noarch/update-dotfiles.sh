@@ -6,10 +6,11 @@ chezmoi git pull
 # get a list of files to update that don't have local changes
 FILES=$(chezmoi status | awk '/^ / {print $2}')
 
-echo -e "\n## Upding files without local changes"
+echo -e "\n## Updating files without local changes"
 
 for f in $FILES; do
-  chezmoi apply -v ~/${f}
+  echo "# $f"
+  chezmoi apply ~/${f}
 done
 
 echo -e "\n## Files with local changes that need adding"
