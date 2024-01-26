@@ -1,5 +1,8 @@
 #!/bin/bash
 
+## TODO
+# - make it work from cron <grr>
+
 MIKROTIK="172.16.1.38 172.16.1.39"
 TMPFILE="$(mktemp)"
 FOLDER="/Users/adam/Documents/Backups/Mikrotik"
