@@ -24,5 +24,7 @@ for f in $FILES; do
   chezmoi apply ~/${f}
 done
 
-echo -e "\n## Files with local changes that need adding"
-chezmoi status 1>&2
+if [ "$1" = "notify" ]; then
+  echo -e "\n## Files with local changes that need commiting"
+  chezmoi status 1>&2
+fi
