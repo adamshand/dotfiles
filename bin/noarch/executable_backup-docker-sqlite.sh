@@ -34,14 +34,18 @@ if ! which sqlite3 > /dev/null; then
 fi
 
 if [ "$1" == "debug" ]; then
-  DEBUG="yes"
-  echo "DEBUG: on" 1>&2
+  DEBUG="on"
+else
+  source /home/adam/bin/noarch/utilities.sh
+  DEBUG="$(is_recently_modified)"
 fi
+
+test -n "$DEBUG" && echo "DEBUG: $DEBUG" 1>&2
 
 if [ ! -d "$BACKUP_BASE" ]; then
   if install -o root -g backup -m 0750 -d $BACKUP_BASE; then
    echo "INFO: created $BACKUP_BASE" 1>&2
-  else 
+  else
     echo "error: cannot create $BACKUP_BASE" 1>&2
     exit 1
   fi
@@ -49,12 +53,12 @@ fi
 
 for volume in $(docker volume ls -q); do
     echo -e "\n## VOLUME: $volume"
-    
+
     BACKUP_DIR="${BACKUP_BASE}/${volume}/${DATESTAMP}"
-    test $DEBUG && echo "DEBUG BACKUP_DIR: $BACKUP_DIR"
+    test "$DEBUG" && echo "DEBUG BACKUP_DIR: $BACKUP_DIR"
 
     MOUNTPOINT=$(docker volume inspect $volume | awk -F\" '/Mountpoint/ {print $4}')
-    test $DEBUG && echo "DEBUG MOUNTPOINT: $MOUNTPOINT"
+    test "$DEBUG" && echo "DEBUG MOUNTPOINT: $MOUNTPOINT"
 
     SQLITE_FILES=$(
       sudo find ${MOUNTPOINT} -maxdepth 2 -exec file {} \; \
@@ -62,14 +66,14 @@ for volume in $(docker volume ls -q); do
     )
 
     for db_file in $SQLITE_FILES; do
-      test $DEBUG && echo "DEBUG FILE: $db_file"
+      test "$DEBUG" && echo "DEBUG FILE: $db_file"
 
       if [[ "$db_file" == *"deleteme"* ]]; then
         continue
       fi
 
       if mkdir -p "$BACKUP_DIR"; then
-        test $DEBUG && echo "DEBUG CREATING: $BACKUP_DIR"
+        test "$DEBUG" && echo "DEBUG CREATING: $BACKUP_DIR"
       else
         echo "error: cannot create $BACKUP_DIR" 1>&2
         exit 1
@@ -79,12 +83,12 @@ for volume in $(docker volume ls -q); do
       SLUG=${db_file#${MOUNTPOINT}/}
       # replace . and / with -
       SLUG=${SLUG//[.\/]/-}
-      test $DEBUG && echo "DEBUG SLUG: $SLUG"
+      test "$DEBUG" && echo "DEBUG SLUG: $SLUG"
 
       # hour and minute appended to support backing up multiple times per day
       BACKUP_FILE="${BACKUP_DIR}/${SLUG}-${TIMESTAMP}"
-      test $DEBUG && echo "DEBUG BACKUP_FILE: $BACKUP_FILE"
-      
+      test "$DEBUG" && echo "DEBUG BACKUP_FILE: $BACKUP_FILE"
+
       echo -e "\nsqlite .backup: ${volume}|${SLUG} -> ${BACKUP_FILE}.sqlite.gz"
       $SQLITE $db_file ".backup ${BACKUP_FILE}.sqlite" && gzip -9qf ${BACKUP_FILE}.sqlite
 
