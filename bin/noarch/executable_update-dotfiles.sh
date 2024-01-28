@@ -1,6 +1,15 @@
 #!/bin/bash
 
-PATH=/bin:/usr/bin:/usr/local/bin:/opt/homebrew/bin:${HOME}/bin/${OSTYPE:0:6}:${HOME}/bin/noarch
+PATH=/bin:/usr/bin:/usr/local/bin:/opt/homebrew/bin:${HOME}/bin/noarch
+
+if [[ "$OSTYPE" = "linux-gnu" || "$OSTYPE" = "linux" ]]; then
+  PATH=${PATH}:${HOME}/bin/linux
+elif [[ "$OSTYPE" = "darwin"* ]]; then
+  PATH=${PATH}:${HOME}/bin/darwin
+else
+  echo "Unknown OS: $OSTYPE" 2>&1
+  exit 1
+fi
 
 echo "## Pulling latest from GitHub"
 chezmoi git pull
