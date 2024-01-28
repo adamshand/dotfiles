@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo 
+PATH=/bin:/usr/bin:/usr/local/bin:/opt/homebrew/bin:${HOME}/bin:${HOME}/bin/noarch
+
 echo "## Pulling latest from GitHub"
 chezmoi git pull
 
