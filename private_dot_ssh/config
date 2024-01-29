@@ -15,7 +15,7 @@ Host github.com *.github.com
   CheckHostIP no
 
 Match host "*.cf"
-  ProxyCommand /opt/homebrew/bin/cloudflared access ssh --hostname $(echo %h | sed 's/\.cf$/.haume.nz/')
+  ProxyCommand cloudflared access ssh --hostname $(echo %h | sed 's/\.cf$/.haume.nz/')
   ForwardAgent yes
 
 Host beam beam.gnosh.net
