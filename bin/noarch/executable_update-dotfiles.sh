@@ -27,7 +27,7 @@ if ! chezmoi git remote -v | grep -q chezmoi ; then
   chezmoi git remote add chezmoi "${HTTP_REMOTE}" || exit 1
 fi
 
-echo "## Updating from GitHub"
+echo "## Pulling from GitHub"
 if ! chezmoi git -- pull --quiet chezmoi main; then
   echo "error: failed to pull changes from GitHub" >&2
   exit 1
@@ -36,7 +36,7 @@ fi
 # get a list of files to update that don't have local changes
 FILES=$(chezmoi status | awk '/^ / {print $2}')
 
-echo -e "\n## Files to update"
+echo -e "\n## Updating local files"
 if [ -n "$FILES" ]; then
   for f in $FILES; do
     echo "$f"
@@ -47,9 +47,13 @@ else
 fi
 
 STATUS=$(chezmoi status)
-echo -e "\n## Local files with changes"
-if [ "$1" = "notify" -a -n "$STATUS" ]; then
-  echo "${STATUS}" >&2
+echo -e "\n## Skipping local files (which have changes)"
+if [ -n "$STATUS" ]; then
+  if [ "$1" = "notify" ]; then
+    echo "${STATUS}" >&2
+  else
+    echo "${STATUS}"
+  fi
 else
   echo "none found."
 fi
