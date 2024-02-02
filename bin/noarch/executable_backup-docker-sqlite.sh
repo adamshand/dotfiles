@@ -5,6 +5,7 @@
 # - 25 Dec 2023 updated to automatically find SQLite databases in Docker Volumes
 # - 18 Jan 2024 will now automatically create $BACKUPBASE if required
 # - 25 Jan 2024 added check for sqlite3
+# -  2 Feb 2024 automatic debug mode if recently modified
 #
 # NOTES
 # - backs up all SQLite files found in the top two levels of a Docker Volume
@@ -12,7 +13,6 @@
 
 # TODO
 # - add ability to back up arbitrary SQLite files ?
-# - automatically run in debug mode if file has been modified in last 48 hours
 
 umask 077   # root read only
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
@@ -36,7 +36,7 @@ fi
 if [ "$1" == "debug" ]; then
   DEBUG="on"
 else
-  source /home/adam/bin/noarch/utilities.sh
+  source ./utilities.sh
   DEBUG="$(check_recently_modified)"
 fi
 

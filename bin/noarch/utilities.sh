@@ -2,7 +2,7 @@
 
 check_recently_modified() {
   local file="${1:-$0}"
-  local days="${2:-7}"
+  local days="${2:-1}"
 
   local now=$(date +%s)
   local mtime=$(stat -c %Y "$file")
