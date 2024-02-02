@@ -28,7 +28,7 @@ if ! chezmoi git remote -v | grep -q chezmoi ; then
 fi
 
 echo "## Pulling latest from GitHub"
-if ! chezmoi git pull chezmoi main; then
+if ! chezmoi git -- pull --quiet chezmoi main; then
   echo "error: failed to pull changes from GitHub" >&2
   exit 1
 fi
