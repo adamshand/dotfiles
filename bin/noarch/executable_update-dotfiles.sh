@@ -41,6 +41,7 @@ else
   echo "No files to update"
 fi
 
+STATUS=$(chezmoi status)
 if [ "$1" = "notify" ]; then
   echo -e "\n## Files with local changes that need commiting"
   chezmoi status >&2
