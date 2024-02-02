@@ -43,17 +43,18 @@ if [ -n "$FILES" ]; then
     chezmoi "apply ~/${f}"
   done
 else
-  echo "none found."
+  echo "none found"
 fi
 
 STATUS=$(chezmoi status)
-echo -e "\n## Skipping local files (which have changes)"
 if [ -n "$STATUS" ]; then
   if [ "$1" = "notify" ]; then
+    echo -e "\n## Skipping local files (which have changes)" >&2
     echo "${STATUS}" >&2
   else
+    echo -e "\n## Skipping local files (which have changes)"
     echo "${STATUS}"
   fi
 else
-  echo "none found."
+  echo "none found"
 fi
