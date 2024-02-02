@@ -31,10 +31,10 @@ fi
 # get a list of files to update that don't have local changes
 FILES=$(chezmoi status | awk '/^ / {print $2}')
 
-echo -e "\n## Updating files without local changes"
+echo -e "\n## Updating …"
 if [ -n "$FILES" ]; then
-  for f in "$FILES"; do
-    echo "... $f"
+  for f in $FILES; do
+    echo "  -> $f"
     chezmoi apply ~/${f}
   done
 else
