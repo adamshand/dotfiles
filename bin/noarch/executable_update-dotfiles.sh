@@ -40,7 +40,7 @@ echo -e "\n## Local files to update"
 if [ -n "$FILES" ]; then
   for f in $FILES; do
     echo "$f"
-    chezmoi "apply ~/${f}"
+    chezmoi apply ~/${f}
   done
 else
   echo "none found"
