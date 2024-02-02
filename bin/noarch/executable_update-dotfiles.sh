@@ -23,7 +23,7 @@ fi
 
 if ! chezmoi git remote -v | grep -q chezmoi ; then
   # important because ssh keys aren't available on remote systems
-  echo "## Adding HTTP git remote" >&2
+  echo -e "## Adding HTTP git remote\n" >&2
   chezmoi git remote add chezmoi "${HTTP_REMOTE}" || exit 1
 fi
 
@@ -49,12 +49,12 @@ fi
 STATUS=$(chezmoi status)
 if [ -n "$STATUS" ]; then
   if [ "$1" = "notify" ]; then
-    echo -e "\n## Files with local changes" >&2
+    echo -e "\n## Local files with changes" >&2
     echo "${STATUS}" >&2
   else
-  echo -e "\n## Files with local changes"
+  echo -e "\n## Local files with changes"
     echo "${STATUS}"
   fi
 else
-  echo -e "\n## No files with local changes"
+  echo -e "\n## Local files with changes\nnone found"
 fi
