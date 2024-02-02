@@ -36,25 +36,25 @@ fi
 # get a list of files to update that don't have local changes
 FILES=$(chezmoi status | awk '/^ / {print $2}')
 
-echo -e "\n## Local files to update"
+echo -e "\n## Updating files"
 if [ -n "$FILES" ]; then
   for f in $FILES; do
     echo "$f"
     chezmoi apply ~/${f}
   done
 else
-  echo "none found"
+  echo "no files to update"
 fi
 
 STATUS=$(chezmoi status)
 if [ -n "$STATUS" ]; then
   if [ "$1" = "notify" ]; then
-    echo -e "\n## Local files with changes" >&2
+    echo -e "\n## Skipping files with local changes" >&2
     echo "${STATUS}" >&2
   else
-  echo -e "\n## Local files with changes"
+  echo -e "\n## Skipping files with local changes"
     echo "${STATUS}"
   fi
 else
-  echo -e "\n## Local files with changes\nnone found"
+  echo -e "\n## Skipping files with local changes\nno files with local changes"
 fi
