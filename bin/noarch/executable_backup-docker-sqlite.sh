@@ -37,7 +37,7 @@ if [ "$1" == "debug" ]; then
   DEBUG="on"
 else
   source /home/adam/bin/noarch/utilities.sh
-  DEBUG="$(is_recently_modified)"
+  DEBUG="$(check_recently_modified)"
 fi
 
 test -n "$DEBUG" && echo "DEBUG: $DEBUG" 1>&2

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-is_recently_modified() {
+check_recently_modified() {
   local file="${1:-$0}"
   local days="${2:-7}"
 
