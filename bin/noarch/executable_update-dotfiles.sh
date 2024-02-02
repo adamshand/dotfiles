@@ -16,7 +16,7 @@ else
   exit 1
 fi
 
-if ! command -v chezmoid > /dev/null 2>&1; then
+if ! command -v chezmoi > /dev/null 2>&1; then
   echo "error: chezmoi not found" >&2
   exit 1
 fi
