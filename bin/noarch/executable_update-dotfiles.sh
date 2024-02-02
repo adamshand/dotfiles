@@ -24,7 +24,7 @@ fi
 if ! chezmoi git remote -v | grep -q chezmoi ; then
   # important because ssh keys aren't available on remote systems
   echo "## Adding HTTP git remote" >&2
-  chezmoi git remote add ${HTTP_REMOTE}
+  chezmoi git remote add chezmoi "${HTTP_REMOTE}" || exit 1
 fi
 
 echo "## Pulling latest from GitHub"
@@ -36,14 +36,14 @@ fi
 # get a list of files to update that don't have local changes
 FILES=$(chezmoi status | awk '/^ / {print $2}')
 
-echo -e "\n## Updated files …"
+echo -e "\n## Updating files"
 if [ -n "$FILES" ]; then
   for f in $FILES; do
     echo "$f"
     chezmoi "apply ~/${f}"
   done
 else
-  echo "  no files to update."
+  echo "no files to update."
 fi
 
 STATUS=$(chezmoi status)
