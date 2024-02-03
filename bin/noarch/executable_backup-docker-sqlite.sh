@@ -36,7 +36,7 @@ fi
 if [ "$1" == "debug" ]; then
   DEBUG="on"
 else
-  source ./utilities.sh
+  source "$(dirname $0)/utilities.sh"
   DEBUG="$(check_recently_modified)"
 fi
 
