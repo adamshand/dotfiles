@@ -1,21 +1,25 @@
 #!/bin/bash
 
-# Automatically toggle macOS Wi-Fi based on ethernet status using launchd.
+# Automatically toggle macOS Wi-Fi based on ethernet status (uses launchd).
+# If ethernet is active, Wi-Fi is disabled. If ethernet is inactive, Wi-Fi is enabled.
 # Written by Adam Shand <adam@shand.net> on 7 Feb 2024
 
 PATH="/bin:/sbin:/usr/bin:/usr/sbin"
+LAUNCHD_SERVICE="nz.haume.wifi-toggle"
+LAUNCHD_FILE="${HOME}/Library/LaunchAgents/${LAUNCHD_SERVICE}.plist"
 
-LAUNCHD_SERVICE="com.haume.wifi-toggle"
-SERVICE="${HOME}/Library/LaunchAgents/${LAUNCHD_SERVICE}.plist"
-
-# asdadf
-ETHERNET_REGEX="CalDigit TS3"
+# Regexes must match a single interface, eg. "(2) CalDigit TS3" or "Apple USB Ethernet Adapter"
+# from `networksetup -listnetworkserviceorder`
+# ETHERNET_REGEX="CalDigit TS3"
 # ETHERNET_REGEX="Apple USB Ethernet Adapter"
+ETHERNET_REGEX="Ethernet"
 WIFI_REGEX="(Wi-Fi|Airport)"
 
 print_usage() {
-  echo "Automatically toggle macOS Wi-Fi based on ethernet status (uses launchd)"
+  echo -e "Automatically toggle macOS Wi-Fi based on ethernet status (uses launchd)\n"
   echo "Usage: $(basename $0) [ off | debug | help ]"
+  echo "       off - stop automatically toggling Wi-Fi"
+  echo "       debug - print debugging information"
   exit 0
 }
 
@@ -29,6 +33,7 @@ print_debug() {
 }
 
 send_notification() {
+  # Configure notifications in: System Settings > Notifications > Script Editor
   osascript -e "display notification \"by $(basename $0)\" with title \"$1\""
 }
 
@@ -43,8 +48,8 @@ is_launchd_loaded() {
 }
 
 enable_launchd() {
-  echo "Creating launchd service: $SERVICE"
-  cat <<EOF > "$SERVICE"
+  echo "Creating launchd service: $LAUNCHD_FILE"
+  cat <<EOF > "$LAUNCHD_FILE"
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -64,25 +69,25 @@ enable_launchd() {
 </dict>
 </plist>
 EOF
-  echo "Loading launchd service: $LAUNCHD_SERVICE"
-  launchctl load "$SERVICE"
+  echo "Enabling launchd service: $LAUNCHD_SERVICE"
+  launchctl load "$LAUNCHD_FILE"
 }
 
 disable_launchd() {
-  echo "Unloading launchd service: $LAUNCHD_SERVICE"
-  launchctl unload "${HOME}/Library/LaunchAgents/${LAUNCHD_SERVICE}.plist"
-  rm "${HOME}/Library/LaunchAgents/${LAUNCHD_SERVICE}.plist"
+  echo "Disabling launchd service: $LAUNCHD_SERVICE"
+  launchctl unload "$LAUNCHD_FILE"
+  rm "$LAUNCHD_FILE"
   exit 0
 }
 
 get_interface() {
   test -z "$1" && print_error "get_interface(): no regex provided"
-  INTERFACE=$(networksetup -listnetworkserviceorder | grep -E -A 1 "$1" | grep -E -o "en[0-9]+")
+  INTERFACE=$(networksetup -listnetworkserviceorder | grep -E -A 1 "^\([0-9]+\) $1" | grep -E -o "en[0-9]+")
 
   if [ -z "$INTERFACE" ]; then
-    print_error "No Ethernet interface found with regex: $1"
+    print_error "No ethernet interface matches: $1"
   elif [[ "$INTERFACE" == *$'\n'* ]]; then
-    print_error "Multiple Ethernet interfaces found with regex: $1"
+    print_error "Multiple ethernet interfaces match: $1"
   fi
 
   print_debug "get_interface(): regex '$1' -> interface '$INTERFACE'"
@@ -104,7 +109,7 @@ is_interface_active() {
 if [ "${OSTYPE:0:6}" != "darwin" ]; then
   print_error "This script only runs on macOS"
 elif [ "$1" == "help" ] || [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
-    print_usage
+  print_usage
 elif [ "$1" == "off" ]; then
   disable_launchd
 elif [ "$1" == "debug" ]; then
