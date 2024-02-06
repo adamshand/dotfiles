@@ -18,7 +18,7 @@ WIFI_REGEX="(Wi-Fi|Airport)"
 print_usage() {
   echo -e "Automatically toggle macOS Wi-Fi based on ethernet status (uses launchd)\n"
   echo "Usage: $(basename $0) [ off | debug | help ]"
-  echo "       off - stop automatically toggling Wi-Fi"
+  echo "       off   - stop automatically toggling Wi-Fi"
   echo "       debug - print debugging information"
   exit 0
 }
