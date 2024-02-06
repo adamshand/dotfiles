@@ -8,11 +8,11 @@ PATH="/bin:/sbin:/usr/bin:/usr/sbin"
 LAUNCHD_SERVICE="nz.haume.wifi-toggle"
 LAUNCHD_FILE="${HOME}/Library/LaunchAgents/${LAUNCHD_SERVICE}.plist"
 
-# Regexes must match a single interface, eg. "(2) CalDigit TS3" or "Apple USB Ethernet Adapter"
-# from `networksetup -listnetworkserviceorder`
-# ETHERNET_REGEX="CalDigit TS3"
+# Regexes must match a single interface from `networksetup -listnetworkserviceorder`
+# eg. "(2) CalDigit TS3" or "(1) Apple USB Ethernet Adapter"
+ETHERNET_REGEX="CalDigit TS3"
 # ETHERNET_REGEX="Apple USB Ethernet Adapter"
-ETHERNET_REGEX="Ethernet"
+# ETHERNET_REGEX="Ethernet"
 WIFI_REGEX="(Wi-Fi|Airport)"
 
 print_usage() {
@@ -82,7 +82,7 @@ disable_launchd() {
 
 get_interface() {
   test -z "$1" && print_error "get_interface(): no regex provided"
-  INTERFACE=$(networksetup -listnetworkserviceorder | grep -E -A 1 "^\([0-9]+\) $1" | grep -E -o "en[0-9]+")
+  INTERFACE=$(networksetup -listnetworkserviceorder | grep -E -A 1 "^\([0-9]+\).* $1" | grep -E -o "en[0-9]+")
 
   if [ -z "$INTERFACE" ]; then
     print_error "No ethernet interface matches: $1"
