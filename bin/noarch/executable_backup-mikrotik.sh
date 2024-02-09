@@ -1,22 +1,50 @@
 #!/bin/bash
 
-## TODO
-# - make it work from cron <grr>
+# Exports config of listed Mikrotik devices to a folder.
+# Preserves 6 Daily, 4 Weekly & 12 Monthly backups for each device.
 
-MIKROTIK="172.16.1.38 172.16.1.39"
-TMPFILE="$(mktemp)"
-FOLDER="/Users/adam/Documents/Backups/Mikrotik"
-#TODAY="$(date +%Y-%m-%d)"
-TODAY="$(date +%a)"
-SSH_KEY="~adam/.ssh/id_rsa"
+# Written by Adam Shand <adam@shand.net> on 26 May 2023
 
-trap 'rm -f ${TMPFILE}; exit 1' 1 2 15
+# Updates:
+#   10 Feb 24 - Fix broken paths when running from cron
+#             - Keep daily, weekly & monthly backups (overwrite new, instead of deleting old)
 
-for router in $MIKROTIK; do
-  ssh -i $SSH_KEY adam@${router} export > $TMPFILE
-  
-  if [ -s $TMPFILE ]; then
-    mv $TMPFILE ${FOLDER}/${router}-${TODAY}.txt
-  fi
+# IMPORTANT: On macOS you must give full disk access to `/usr/bin/cron` or change $FOLDER
+FOLDER="${HOME}/Documents/Backups/Mikrotik"
+SSH_OPTIONS="-o BatchMode=yes"
+MIKROTIKS="172.16.1.38 172.16.1.39"
+
+if [ ! -d "${FOLDER}" ]; then
+  echo "info: making folder: ${FOLDER}" >&2
+  mkdir -p "${FOLDER}"
+fi
+
+# if [ ! -f "${SSH_OPTIONS}" ]; then
+#   echo "SSH dkey not found at ${SSH_KEY}" >&2
+#   exit 1
+# fi
+
+DOW=$(date +%u)       # Day of week (1-7)
+DOM=$(date +%d)       # Day of month (01-31)
+WOY=$(date +%V)       # Week of year (01-52)
+WOM=$(( ${WOY} % 4 )) # Week of month (eg. 1-4)
+MOY=$(date +%m)       # Month of year (01-12)
+
+# echo "info: DOW=${DOW} DOM=${DOM} WOY=${WOY} WOM=${WOM} MOY=${MOY}"
+
+if [ "$DOM" == 1 ]; then
+  SUFFIX="monthly-${MOY}"
+  echo "info: $SUFFIX"
+elif [ "$DOW" == 7 ]; then
+  SUFFIX="weekly-${WOM}"
+  echo "info: $SUFFIX"
+else
+  SUFFIX="daily-${DOW}"
+  echo "info: $SUFFIX"
+fi
+
+for mikrotik in $MIKROTIKS; do
+  FILE="${FOLDER}/${mikrotik}-${SUFFIX}.txt"
+  echo "export ${mikrotik} config to ${FILE}"
+  ssh ${SSH_OPTIONS} adam@${mikrotik} export > ${FILE}
 done
-
