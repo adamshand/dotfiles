@@ -19,11 +19,6 @@ if [ ! -d "${FOLDER}" ]; then
   mkdir -p "${FOLDER}"
 fi
 
-# if [ ! -f "${SSH_OPTIONS}" ]; then
-#   echo "SSH dkey not found at ${SSH_KEY}" >&2
-#   exit 1
-# fi
-
 DOW=$(date +%u)       # Day of week (1-7)
 DOM=$(date +%d)       # Day of month (01-31)
 WOY=$(date +%V)       # Week of year (01-52)
