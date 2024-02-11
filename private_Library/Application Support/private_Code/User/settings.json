@@ -76,7 +76,7 @@
   "editor.stickyScroll.enabled": true,
   "editor.inlineSuggest.enabled": true,
   "github.copilot.enable": {
-    "*": true,
+    "*": false,
     "plaintext": true,
     "markdown": false,
     "scminput": false,

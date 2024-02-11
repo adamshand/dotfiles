@@ -11,7 +11,7 @@
 
 # IMPORTANT: On macOS you must give full disk access to `/usr/bin/cron` or change $FOLDER
 FOLDER="${HOME}/Documents/Backups/Mikrotik"
-SSH_OPTIONS="-o BatchMode=yes"
+SSH_OPTIONS="-i ${HOME}/.ssh/id_rsa -o BatchMode=yes"
 MIKROTIKS="172.16.1.38 172.16.1.39"
 
 if [ ! -d "${FOLDER}" ]; then
