@@ -2,12 +2,9 @@
 # Get random quote, format and update /etc/issue.net for SSH banner
 # Written 19 Jan 2024
 
-## TODO
-
-#QUOTE_URL="http://172.16.1.42:5173/api/random/quote"
 QUOTE_URL="https://adam.nz/api/quote?id=random"
 BANNER_FILE="/etc/issue.net"
-CURL_OPTIONS="--silent --fail --retry 3 --retry-delay 60"
+#CURL_OPTIONS="--silent --fail --retry 3 --retry-delay 60"
 CURL_OPTIONS="--retry 3 --retry-delay 60"
 
 if [ "$1" == "debug" ]; then
