@@ -8,6 +8,7 @@
 QUOTE_URL="https://adam.nz/api/quote?id=random"
 BANNER_FILE="/etc/issue.net"
 CURL_OPTIONS="--silent --fail --retry 3 --retry-delay 60"
+CURL_OPTIONS="--retry 3 --retry-delay 60"
 
 if [ "$1" == "debug" ]; then
   DEBUG="yes"
