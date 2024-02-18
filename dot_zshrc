@@ -141,16 +141,18 @@ dst()   { docker start $*; }
 drs()   { docker restart $*; }
 
 if (( ${+commands[docker-compose]} )); then
-  DC='docker-compose'
+  dc() { docker-compose "$@"; }
 else
-  DC='docker compose'
+  dc() { docker compose "$@"; }
 fi
-dcu()   { $DC up -d $* && dcl $*; }
-dcd()   { $DC down; }
-dl()    { docker logs --follow --since=1m --timestamps $*; }
-dcl()   { docker-compose logs --follow --timestamps $*; }
-dcdu()  { dcd && $DC up -d && dcl; }
-dv()    { docker volume $*; }
+
+dcl()   { dc logs --follow --timestamps "$@"; }
+dcu()   { dc up -d "$@" && dcl "$@"; }
+dcd()   { dc down; }
+dl()    { docker logs --follow --since=1m --timestamps "$@"; }
+dcdu()  { dcd && dc up -d && dcl; }
+dv()    { docker volume "$@"; }
+
 flaunt() { egrep "($1|$)"; }        # highlight matches without filtering
 
 gcp() {
