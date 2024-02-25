@@ -13,6 +13,7 @@
 
 # TODO
 # - add ability to back up arbitrary SQLite files ?
+# - backup to S3 (to save local disk space)
 
 umask 077   # root read only
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
