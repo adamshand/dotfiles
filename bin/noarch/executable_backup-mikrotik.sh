@@ -19,11 +19,11 @@ if [ ! -d "${FOLDER}" ]; then
   mkdir -p "${FOLDER}"
 fi
 
-DOW=$(date +%u)       # Day of week (1-7)
-DOM=$(date +%d)       # Day of month (01-31)
-WOY=$(date +%V)       # Week of year (01-52)
-WOM=$(( ${WOY} % 4 )) # Week of month (eg. 1-4)
-MOY=$(date +%m)       # Month of year (01-12)
+DOW=$(date +%u)          # Day   of week  (1-7)
+DOM=$(date +%d)          # Day   of month (01-31)
+WOY=$(date +%V)          # Week  of year  (01-52)
+WOM=$(( 10#${WOY} % 4 )) # Week  of month (eg. 1-4)   (10# to avoid octal from 0 padding)
+MOY=$(date +%m)          # Month of year  (01-12)
 
 # echo "info: DOW=${DOW} DOM=${DOM} WOY=${WOY} WOM=${WOM} MOY=${MOY}"
 
