@@ -1,4 +1,4 @@
-// https://zed.dev/docs/configuring-zed
+// https://zed.dev/docs/configuring-zed 
 // CMD-SHIFT-P and `open default settings` for default settings
 {
   "theme": "Gruvbox Dark",
