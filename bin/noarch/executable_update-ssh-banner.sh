@@ -6,11 +6,12 @@ QUOTE_URL="https://adam.nz/api/quote?id=random"
 # QUOTE_URL="http://localhost:5173/api/quote?id=random"
 # QUOTE_URL='https://pb.haume.nz/api/collections/adam/records/?perPage=1&sort=@random&filter=(format="quote")&fields=content,author'
 BANNER_FILE="/etc/issue.net"
-CURL_OPTIONS="--silent --retry 3 --retry-delay 60"
+CURL_OPTIONS="--silent --fail --retry 3 --retry-delay 60"
 
 # sets final exit code as failure if any step in pipeline fails
 set -o pipefail
-if ! QUOTE=$(curl ${CURL_OPTIONS} ${QUOTE_URL} | fmt -w 60); then
+# if ! QUOTE=$(curl ${CURL_OPTIONS} ${QUOTE_URL} | fmt -w 60); then
+if ! QUOTE=$( curl ${CURL_OPTIONS} ${QUOTE_URL} ); then
   echo "error: downloading and formatting quote" 1>&2
   exit 1
 fi
@@ -22,9 +23,9 @@ fi
 
 if [ "$1" == "debug" ] || [ "${DEBUG}" ]; then
   echo -e "DEBUG: on\n" 1>&2
-  echo "$QUOTE"
+  echo -e "$QUOTE"
 else
-  echo -e "$QUOTE\n" > $BANNER_FILE
+  echo -e "\n$QUOTE\n" > $BANNER_FILE
 fi
 
 # boxes -p h2v1 -d stone -a r

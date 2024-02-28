@@ -25,6 +25,8 @@ DAYS_TO_KEEP=2
 DATESTAMP="$(date +%Y-%m-%d)"
 TIMESTAMP="$(date +%H%M)"
 
+EXTRA_BACKUP_DIRS="/srv"
+
 if [ "$EUID" -ne 0 ]; then
   echo "error: must be run as root"
   exit 1
