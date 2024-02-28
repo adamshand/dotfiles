@@ -141,10 +141,13 @@ done
 test "$DEBUG" && echo -e "\n## Skipped containers: $SKIPPED"
 
 # Delete backups more than $DAYS_TO_KEEP days old
-find $BACKUP_BASE -mindepth 1 -maxdepth 2 -mtime +${DAYS_TO_KEEP} -name "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]" -print0 | xargs --no-run-if-empty -0 rm -rv
+find "$BACKUP_BASE" -mindepth 1 -maxdepth 2 -mtime +${DAYS_TO_KEEP} -name "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]" -print0 | xargs --no-run-if-empty -0 rm -rv
 
 # delete empty container directories
-# rmdir --ignore-fail-on-non-empty -p ${BACKUP_BASE}/*/*
+rmdir --ignore-fail-on-non-empty -pv ${BACKUP_BASE}/*/*
+
+echo -e "\n##########\n"
+tree --du -sh "$BACKUP_BASE"
 
 #     USERPASS=$(docker exec "$container" sh -c '\
 #       if [ -n "$MYSQL_ROOT_PASSWORD_FILE" ]; then

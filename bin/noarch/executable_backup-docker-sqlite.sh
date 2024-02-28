@@ -14,6 +14,7 @@
 # TODO
 # - add ability to back up arbitrary SQLite files ?
 # - backup to S3 (to save local disk space)
+# - change `docker volume ls` to exclude anonymous volumes
 
 umask 077   # root read only
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
@@ -66,6 +67,8 @@ for volume in $(docker volume ls -q); do
         | awk -F: '/SQLite 3.x database/ {print $1}'
     )
 
+    echo $SQLITE_FILES
+    exit
     for db_file in $SQLITE_FILES; do
       test "$DEBUG" && echo "DEBUG FILE: $db_file"
 
@@ -100,7 +103,10 @@ for volume in $(docker volume ls -q); do
 done    # end docker volume loop
 
 # Delete backups more than $DAYS_TO_KEEP days old
-find $BACKUP_BASE -mindepth 1 -maxdepth 2 -mtime +${DAYS_TO_KEEP} -name "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]" -print0 | xargs --no-run-if-empty -0 rm -rv
+find "$BACKUP_BASE" -mindepth 1 -maxdepth 2 -mtime +${DAYS_TO_KEEP} -name "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]" -print0 | xargs --no-run-if-empty -0 rm -rv
+
+# delete empty container directories
+rmdir --ignore-fail-on-non-empty -pv ${BACKUP_BASE}/*/*
 
 echo -e "\n##########\n"
-tree --du -sh /var/backups/db/
+tree --du -sh "$BACKUP_BASE"
