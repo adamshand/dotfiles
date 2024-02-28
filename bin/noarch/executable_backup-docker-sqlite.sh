@@ -25,7 +25,7 @@ DAYS_TO_KEEP=2
 DATESTAMP="$(date +%Y-%m-%d)"
 TIMESTAMP="$(date +%H%M)"
 
-EXTRA_BACKUP_DIRS="/srv"
+EXTRA_BACKUP_DIRS="/srv/dockge"
 
 if [ "$EUID" -ne 0 ]; then
   echo "error: must be run as root"
@@ -68,9 +68,7 @@ for volume in $(docker volume ls -q); do
       sudo find ${MOUNTPOINT} -maxdepth 2 -exec file {} \; \
         | awk -F: '/SQLite 3.x database/ {print $1}'
     )
-
-    echo $SQLITE_FILES
-    exit
+    
     for db_file in $SQLITE_FILES; do
       test "$DEBUG" && echo "DEBUG FILE: $db_file"
 
