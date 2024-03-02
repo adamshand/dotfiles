@@ -16,6 +16,8 @@
 # - backup to S3 (to save local disk space)
 # - change `docker volume ls` to exclude anonymous volumes
 
+source "$(dirname $0)/utilities.sh"
+
 umask 077   # root read only
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 SQLITE="sqlite3 -batch"
@@ -40,7 +42,6 @@ fi
 if [ "$1" == "debug" ]; then
   DEBUG="on"
 else
-  source "$(dirname $0)/utilities.sh"
   DEBUG="$(check_recently_modified)"
 fi
 

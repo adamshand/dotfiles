@@ -43,3 +43,9 @@ for mikrotik in $MIKROTIKS; do
   echo "export ${mikrotik} config to ${FILE}"
   ssh ${SSH_OPTIONS} adam@${mikrotik} export > ${FILE}
 done
+
+
+# TODO: update to only save a new copy if different than yesterday
+# if ! diff <(tail -n +2 today.conf) <(tail -n +2 yesterday.conf) > /dev/null; then
+#   cp today.conf backup_directory/
+# fi

@@ -1,5 +1,15 @@
 #!/bin/bash
 
+print_error() {
+  echo -e "ERROR: $1" >&2
+  exit 1
+}
+
+print_debug() {
+  test -n "$DEBUG" && echo -e "DEBUG: $1" >&2
+}
+
+
 check_recently_modified() {
   local file="${1:-$0}"
   local days="${2:-1}"
@@ -15,3 +25,4 @@ check_recently_modified() {
     echo "`basename $file` was modified $age days ago (debug for $days days)"
   fi
 }
+

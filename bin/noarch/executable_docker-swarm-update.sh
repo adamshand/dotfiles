@@ -1,7 +1,7 @@
 #!/bin/bash
 
-SERVICE_NAME="your-service"
-IMAGE_NAME="your-registry/your-image"
+source "$(dirname $0)/utilities.sh"
+
 MINIMUM_AGE_DAYS=7
 
 # Function to check image age
@@ -28,6 +28,20 @@ check_image_age() {
     fi
 }
 
+# if docker info -f '{{.Swarm.LocalNodeState}}' | grep --silent inactive; do
+if [ "$(docker info -f '{{.Swarm.ControlAvailable}}')" != "true" ]; then
+  print_error 'This node is not a Docker Swarm manager'
+fi
+
+docker service ls --format "{{.Name}} {{.Image}}" | while read service imageversion; do
+    image="${imageversion%:*}"
+    echo "Service: $service"
+    echo "Image:   $image"
+
+    # Any additional commands using $service_id or $service_name
+done
+
+exit
 # Check if an update is needed and trigger Docker Swarm service update
 if check_image_age ; then
     echo "Updating service $SERVICE_NAME to use latest image $IMAGE_NAME:latest"
