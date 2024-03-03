@@ -141,12 +141,14 @@ done
 test "$DEBUG" && echo -e "\n## Skipped containers: $SKIPPED"
 
 # Delete backups more than $DAYS_TO_KEEP days old
-find "$BACKUP_BASE" -mindepth 1 -maxdepth 2 -mtime +${DAYS_TO_KEEP} -name "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]" -print0 | xargs --no-run-if-empty -0 rm -rv
+echo -e "\n## DELETING OLD BACKUPS"
+find "$BACKUP_BASE" -mindepth 1 -maxdepth 2 -mtime +${DAYS_TO_KEEP} -name "[0-9]{4}-[0-9]{2}-[0-9]{2}" -print -delete
 
-# delete empty container directories
-rmdir --ignore-fail-on-non-empty -pv ${BACKUP_BASE}/*/*
+# delete empty directories (but not BACKUP_BASE)
+echo -e "\n## DELETING EMPTY FOLDERS"
+find "$BACKUP_BASE" -mindepth 1 -type d -empty -print -delete
 
-echo -e "\n##########\n"
+echo -e "\n## BACKUPS in ${BACKUP_BASE}\n"
 tree --du -sh "$BACKUP_BASE"
 
 #     USERPASS=$(docker exec "$container" sh -c '\

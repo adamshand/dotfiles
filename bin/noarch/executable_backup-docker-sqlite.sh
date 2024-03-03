@@ -107,11 +107,11 @@ done    # end docker volume loop
 
 # Delete backups more than $DAYS_TO_KEEP days old
 echo -e "\n## DELETING OLD BACKUPS"
-find "$BACKUP_BASE" -mindepth 1 -maxdepth 2 -mtime +${DAYS_TO_KEEP} -name "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]" -print0 | xargs --no-run-if-empty -0 rm -rv
+find "$BACKUP_BASE" -mindepth 1 -maxdepth 2 -mtime +${DAYS_TO_KEEP} -name "[0-9]{4}-[0-9]{2}-[0-9]{2}" -print -delete
 
 # delete empty directories (but not BACKUP_BASE)
-echo -e "\n## DELETING EMPTY DIRECTORIES"
+echo -e "\n## DELETING EMPTY FOLDERS"
 find "$BACKUP_BASE" -mindepth 1 -type d -empty -print -delete
 
-echo -e "\n##########\n"
+echo -e "\n## BACKUPS in ${BACKUP_BASE}\n"
 tree --du -sh "$BACKUP_BASE"
