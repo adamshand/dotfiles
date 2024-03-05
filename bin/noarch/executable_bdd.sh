@@ -16,7 +16,7 @@ DATESTAMP="$(date +%Y-%m-%d)"
 TIMESTAMP="$(date +%H%M)"
 
 DEBUG="yes"
-DEBUG=""
+#DEBUG=""
 
 DATABASE_REGEX="(db|mysql|postgres|ldap)"
 # EXCLUDE_MOUNT_REGEX="/srv/srv/www /vol/media/moa"
@@ -75,13 +75,17 @@ backup_sqlite_database() {
 }
 
 for container in $(docker container ls --format "{{.Names}}"); do
+  # remove `.replica#.swarm_id` from end of container name to have stable backup dir
+  # note: sed requires \+ to to mean 'one or more' 
+  container_short="$( echo $container_raw | sed 's/\.[0-9]\+\.[A-Za-z0-9]\+//g' )"
+
   print_debug "container: $container"
 
   if echo $container | grep -iEq "$DATABASE_REGEX"; then
     print_debug "$container matches DATABASE_REGEX $DATABASE_REGEX"
   fi
 
-  BACKUP_DIR="${BACKUP_BASE}/${container}/${DATESTAMP}"
+  BACKUP_DIR="${BACKUP_BASE}/${container_short}/${DATESTAMP}"
   echo "backup_dir: ${BACKUP_DIR}"
   make_backup_dir ${BACKUP_DIR}
 
@@ -98,11 +102,11 @@ for container in $(docker container ls --format "{{.Names}}"); do
     fi
 
     echo "mount_src: $mount_src"
-    
-    for db in $( find_sqlite_databases $mount_src ); do 
+
+    for db in $( find_sqlite_databases $mount_src ); do
       if echo $db | grep -Eq "$EXCLUDE_SQLITE_REGEX"; then
         echo "sqlite_db: skipping $db"
-        continue 
+        continue
       fi
 
       echo "sqlite_db: $db"
