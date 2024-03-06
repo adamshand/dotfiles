@@ -11,6 +11,7 @@ SQLITE="sqlite3 -batch"
 SQLITE_SEARCH_DEPTH=2
 
 BACKUP_BASE="/var/backups/db"
+BACKUP_BASE="/tmp/backups-db"
 DAYS_TO_KEEP=2
 DATESTAMP="$(date +%Y-%m-%d)"
 TIMESTAMP="$(date +%H%M)"
@@ -18,10 +19,10 @@ TIMESTAMP="$(date +%H%M)"
 DEBUG="yes"
 #DEBUG=""
 
-DATABASE_REGEX="(db|mysql|postgres|ldap)"
+DATABASE_REGEX="(db|mysql|mariadb|postgres|ldap)"
 # EXCLUDE_MOUNT_REGEX="/srv/srv/www /vol/media/moa"
 EXCLUDE_MOUNT_REGEX="^(/srv|srv/www|/vol/moa/media|/vol/moa/media/[a-z]*)$"
-EXCLUDE_SQLITE_REGEX="^(.*users.*|.*\.bak)$"
+EXCLUDE_SQLITE_REGEX="^(.*users.*|.*\.bak|.*\.old)$"
 
 if [ "$EUID" -ne 0 ]; then
   print_error "must be run as root"
@@ -35,86 +36,112 @@ done
 
 if [ ! -d "$BACKUP_BASE" ]; then
   if install -o root -g backup -m 0750 -d $BACKUP_BASE; then
-   echo "INFO: created $BACKUP_BASE" 1>&2
+   print_debug "created $BACKUP_BASE" 1>&2
   else
-    echo "error: cannot create $BACKUP_BASE" 1>&2
-    exit 1
+    print_error "cannot create $BACKUP_BASE" 1>&2
   fi
 fi
 
-test -n "$DEBUG" && echo "DEBUG: $DEBUG" 1>&2
+make_backup_dest() {
+  local folder="$1"
 
-
-make_backup_dir() {
-  local BACKUP_DIR="$1"
-
-  if mkdir -p "$BACKUP_DIR"; then
-    test "$DEBUG" && echo "DEBUG CREATING: $BACKUP_DIR"
+  if mkdir -p -m 700 "$folder"; then
+    echo "backup_dest: $folder"
   else
-    print_error "error: cannot create $BACKUP_DIR" 1>&2
+    print_error "cannot create $folder" 1>&2
   fi
 }
 
-find_sqlite_databases() {
-  find ${1} -maxdepth ${SQLITE_SEARCH_DEPTH} -exec file {} \; \
-    | awk -F: '/SQLite 3.x database/ {print $1}' 
-}
+## BACKUP POSTGRESQL
 
-backup_sqlite_database() {
-  local sqlite_file="$1"
-  local slug_raw="${sqlite_file#${mount_src}/}"
-  local slug="${slug_raw//\//#}"
-  local backup_file="${BACKUP_DIR}/${slug}"
-
-  echo "sqlite .backup: ${sqlite_file} -> ${backup_file}.sqlite.gz"
-  $SQLITE $sqlite_file ".backup ${backup_file}.sqlite" && gzip -9qf ${backup_file}.sqlite
-
-  echo "sqlite .dump: ${sqlite_file} -> ${backup_file}.sql.gz"
-  $SQLITE $sqlite_file ".dump" | gzip -9 > ${backup_file}.sql.gz
-  echo
-}
-
-for container in $(docker container ls --format "{{.Names}}"); do
-  # remove `.replica#.swarm_id` from end of container name to have stable backup dir
-  # note: sed requires \+ to to mean 'one or more' 
-  container_short="$( echo $container_raw | sed 's/\.[0-9]\+\.[A-Za-z0-9]\+//g' )"
-
-  print_debug "container: $container"
-
-  if echo $container | grep -iEq "$DATABASE_REGEX"; then
-    print_debug "$container matches DATABASE_REGEX $DATABASE_REGEX"
-  fi
-
-  BACKUP_DIR="${BACKUP_BASE}/${container_short}/${DATESTAMP}"
-  echo "backup_dir: ${BACKUP_DIR}"
-  make_backup_dir ${BACKUP_DIR}
-
-  for mount_src in $( docker inspect "$container" --format '{{range .Mounts}}{{println .Source}}{{end}}' ); do
-    # echo "echo $mount_src | grep $EXCLUDE_MOUNT_REGEX"
-    if echo $mount_src | grep -Eq "$EXCLUDE_MOUNT_REGEX"; then
-      print_debug "on ${container}, skipping excluded mount_source: $mount_src"
+## BACKUP SQLITE DATABASES
+sqlite_backup_container() {
+  # Search every container mount for SQLite files 
+  for mount in $( docker inspect "$container" --format '{{range .Mounts}}{{println .Source}}{{end}}' ); do
+    if echo $mount | grep -Eq "$EXCLUDE_MOUNT_REGEX"; then
+      echo "## mount: $mount (skipping, matches ${EXCLUDE_MOUNT_REGEX})"
       continue
     fi
 
-    if [ ! -d "$mount_src" ]; then
-      print_debug "on ${container}, skipping file $mount_src"
+    if [ ! -d "$mount" ]; then
+      echo "## mount: $mount (skipping file)"
       continue
     fi
 
-    echo "mount_src: $mount_src"
+    echo "## mount: $mount"
 
-    for db in $( find_sqlite_databases $mount_src ); do
+    # for db in $( sqlite_find  $mount ); do
+    for db in $( find $mount -maxdepth ${SQLITE_SEARCH_DEPTH} -exec file {} \; | awk -F: '/SQLite 3.x database/ {print $1}' ); do
       if echo $db | grep -Eq "$EXCLUDE_SQLITE_REGEX"; then
-        echo "sqlite_db: skipping $db"
+        echo "sqlite_file: $db (skipping, matches ${EXCLUDE_SQLITE_REGEX})"
         continue
       fi
 
-      echo "sqlite_db: $db"
-      backup_sqlite_database $db
+      echo "# sqlite_file: $db"
+      sqlite_backup_file $db
     done
-
-
   done
-  echo
+}
+
+sqlite_backup_file() {
+  local file_src="$1"
+  local slug_raw="${file_src#${mount}/}"
+  local slug="${slug_raw//\//#}"
+  
+  # remove `.replica#.swarm_id` from end of container name to have stable backup dir
+  local backup_dest="${BACKUP_BASE}/${container//\.[0-9]*\.[A-Za-z0-9]*/}/${DATESTAMP}"
+  make_backup_dest ${backup_dest}
+
+  local file_dest="${backup_dest}/${slug}-${TIMESTAMP}"
+
+  # TODO: some kind of retry on locking errors?
+  # eg. sql error: database is locked (5)
+
+  echo "sqlite .backup: ${file_src} -> ${file_dest}.sqlite.gz"
+  $SQLITE $file_src ".backup ${file_dest}.sqlite" && gzip -9qf ${file_dest}.sqlite
+
+  echo "sqlite .dump: ${file_src} -> ${file_dest}.sql.gz"
+  $SQLITE $file_src ".dump" | gzip -9 > ${file_dest}.sql.gz
+}
+
+## BEGIN MAIN
+test -n "$DEBUG" && echo "DEBUG: $DEBUG" 1>&2
+
+for container in $(docker container ls --format "{{.Names}}"); do
+  echo -e "\n### container: $container"
+
+  # Match MySQL, MariaDB or PostgreSQL
+  if echo $container | grep -iEq "$DATABASE_REGEX"; then
+    print_debug "$container matches DATABASE_REGEX $DATABASE_REGEX"
+    
+  else
+    sqlite_backup_container
+  fi
 done
 
+# Delete backups more than $DAYS_TO_KEEP days old
+echo -e "\n## DELETING OLD BACKUPS"
+find "$BACKUP_BASE" -mindepth 1 -maxdepth 2 -mtime +${DAYS_TO_KEEP} -name "[0-9]{4}-[0-9]{2}-[0-9]{2}" -print -delete
+
+# Delete empty directories (but not BACKUP_BASE)
+echo -e "\n## DELETING EMPTY FOLDERS"
+find "$BACKUP_BASE" -mindepth 1 -type d -empty -print -delete
+
+echo -e "\n## CURRENT BACKUPS IN ${BACKUP_BASE}\n"
+tree --du -sh "$BACKUP_BASE"
+
+##############################
+### delete ...
+deleteme_sqlite_find() {
+  result=$( 
+    find ${1} -maxdepth ${SQLITE_SEARCH_DEPTH} -exec file {} \; | awk -F: '/SQLite 3.x database/ {print $1}' 
+  )
+
+  if [ -z "$result" ]; then
+    return 1
+  else
+    echo "$result"
+  fi
+}
+
+container_short="$( echo $container | sed 's/\.[0-9]\+\.[A-Za-z0-9]\+//g' )"
