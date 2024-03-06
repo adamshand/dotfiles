@@ -15,6 +15,7 @@ BACKUP_BASE="/tmp/backups-db"
 DAYS_TO_KEEP=2
 DATESTAMP="$(date +%Y-%m-%d)"
 TIMESTAMP="$(date +%H%M)"
+BACKUP_GROUP="staff"
 
 DEBUG="yes"
 #DEBUG=""
@@ -34,25 +35,13 @@ for cmd in docker sqlite3; do
   fi
 done
 
-if [ ! -d "$BACKUP_BASE" ]; then
-  if install -o root -g backup -m 0750 -d $BACKUP_BASE; then
-   print_debug "created $BACKUP_BASE" 1>&2
-  else
-    print_error "cannot create $BACKUP_BASE" 1>&2
-  fi
-fi
-
 make_backup_dest() {
   local folder="$1"
 
-  if mkdir -p -m 700 "$folder"; then
-    echo "backup_dest: $folder"
-  else
+  if ! install -o root -g "$BACKUP_GROUP" -m 2750 -d $folder; then
     print_error "cannot create $folder" 1>&2
   fi
 }
-
-## BACKUP POSTGRESQL
 
 ## BACKUP SQLITE DATABASES
 sqlite_backup_container() {
@@ -97,15 +86,23 @@ sqlite_backup_file() {
   # TODO: some kind of retry on locking errors?
   # eg. sql error: database is locked (5)
 
-  echo "sqlite .backup -> ${file_dest}.backup.gz"
+  echo "backup: ${file_dest}.backup.gz"
   $SQLITE $file_src ".backup ${file_dest}.backup" && gzip -9qf "${file_dest}.backup"
 
-  echo "sqlite .dump -> ${file_dest}.dump.gz"
+  echo "dump: ${file_dest}.dump.gz"
   $SQLITE $file_src ".dump" | gzip -9 > "${file_dest}.dump.gz"
 }
 
 ## BEGIN MAIN
 test -n "$DEBUG" && echo "DEBUG: $DEBUG" 1>&2
+
+if [ ! -d "$BACKUP_BASE" ]; then
+  if install -o root -g "$BACKUP_GROUP" -m 2750 -d $BACKUP_BASE; then
+   print_debug "created $BACKUP_BASE" 1>&2
+  else
+    print_error "cannot create $BACKUP_BASE" 1>&2
+  fi
+fi
 
 for container in $(docker container ls --format "{{.Names}}"); do
   echo -e "\n### container: $container"
@@ -127,7 +124,7 @@ find "$BACKUP_BASE" -mindepth 1 -maxdepth 2 -mtime +${DAYS_TO_KEEP} -name "[0-9]
 echo -e "\n## DELETING EMPTY FOLDERS"
 find "$BACKUP_BASE" -mindepth 1 -type d -empty -print -delete
 
-echo -e "\n## CURRENT BACKUPS IN ${BACKUP_BASE}\n"
+echo -e "\n## CURRENT BACKUPS: ${BACKUP_BASE}\n"
 tree --du -sh "$BACKUP_BASE"
 
 ##############################
