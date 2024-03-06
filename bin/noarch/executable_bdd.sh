@@ -19,7 +19,7 @@ TIMESTAMP="$(date +%H%M)"
 DEBUG="yes"
 #DEBUG=""
 
-DATABASE_REGEX="(db|mysql|mariadb|postgres|ldap)"
+DATABASE_REGEX="(db|mysql|mariadb|postgres)"
 # EXCLUDE_MOUNT_REGEX="/srv/srv/www /vol/media/moa"
 EXCLUDE_MOUNT_REGEX="^(/srv|srv/www|/vol/moa/media|/vol/moa/media/[a-z]*)$"
 EXCLUDE_SQLITE_REGEX="^(.*users.*|.*\.bak|.*\.old)$"
@@ -86,7 +86,7 @@ sqlite_backup_container() {
 sqlite_backup_file() {
   local file_src="$1"
   local slug_raw="${file_src#${mount}/}"
-  local slug="${slug_raw//\//#}"
+  local slug="sqlite-${slug_raw//\//#}"
   
   # remove `.replica#.swarm_id` from end of container name to have stable backup dir
   local backup_dest="${BACKUP_BASE}/${container//\.[0-9]*\.[A-Za-z0-9]*/}/${DATESTAMP}"
@@ -97,11 +97,11 @@ sqlite_backup_file() {
   # TODO: some kind of retry on locking errors?
   # eg. sql error: database is locked (5)
 
-  echo "sqlite .backup: ${file_src} -> ${file_dest}.sqlite.gz"
-  $SQLITE $file_src ".backup ${file_dest}.sqlite" && gzip -9qf ${file_dest}.sqlite
+  echo "sqlite .backup -> ${file_dest}.backup.gz"
+  $SQLITE $file_src ".backup ${file_dest}.backup" && gzip -9qf "${file_dest}.backup"
 
-  echo "sqlite .dump: ${file_src} -> ${file_dest}.sql.gz"
-  $SQLITE $file_src ".dump" | gzip -9 > ${file_dest}.sql.gz
+  echo "sqlite .dump -> ${file_dest}.dump.gz"
+  $SQLITE $file_src ".dump" | gzip -9 > "${file_dest}.dump.gz"
 }
 
 ## BEGIN MAIN
