@@ -143,12 +143,17 @@ for container in $(docker container ls --format "{{.Names}}"); do
   echo -e "\n### container: $container"
   CONTAINER_SHORT=${container//\.[0-9]*\.[A-Za-z0-9]*/}
 
-  # Match MySQL, MariaDB or PostgreSQL
   if echo $container | grep -iEq "db|postgis|postgres"; then
     image=$( docker inspect "$container" --format '{{.Config.Image}}' )
     echo "### image: $image"
 
     postgres_backup_container
+
+  elif echo $container | grep -iEq "mariadb|mysql"; then
+    image=$( docker inspect "$container" --format '{{.Config.Image}}' )
+    echo "### image: $image"
+
+    # mysql_backup_container
 
   else
     # sqlite_backup_container
