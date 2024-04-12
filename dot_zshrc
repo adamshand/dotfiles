@@ -201,7 +201,7 @@ autoload -U zmv           # zmv '* *' '$f:gs/ /_'; more at: https://strcat.de/zs
 autoload -U tetris tetris
 
 if (( ${+commands[eza]} )); then
-    alias l='eza -lgh --group --group-directories-first --time-style=long-iso --colour-scale'
+    alias l='eza --git -lgh --group --group-directories-first --time-style=long-iso --colour-scale'
     alias ls='eza -Fg --group-directories-first --colour-scale'
 else;
     alias l='ls $LARG'
