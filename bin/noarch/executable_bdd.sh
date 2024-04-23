@@ -11,7 +11,7 @@ SQLITE="sqlite3 -batch"
 SQLITE_SEARCH_DEPTH=2
 
 BACKUP_BASE="/var/backups/db"
-BACKUP_BASE="/tmp/backups-db"
+# BACKUP_BASE="/tmp/backups-db"
 DAYS_TO_KEEP=2
 DATESTAMP="$(date +%Y-%m-%d)"
 TIMESTAMP="$(date +%H%M)"
@@ -42,7 +42,6 @@ make_backup_dest() {
   fi
 }
 
-## BACKUP SQLITE DATABASES
 sqlite_backup_container() {
   # Search every container mount for SQLite files 
   for mount in $( docker inspect "$container" --format '{{range .Mounts}}{{println .Source}}{{end}}' ); do
@@ -102,7 +101,6 @@ cleanup_backups() {
   tree --du -sh "$BACKUP_BASE"
 }
 
-## BACKUP POSTGRESQL DATABASES
 postgres_backup_container() {
   local username=$( docker inspect "$container" | jq -r '.[0].Config.Env[] | select(startswith("POSTGRES_USER=")) | split("=")[1]' )
   local password=$( docker inspect "$container" | jq -r '.[0].Config.Env[] | select(startswith("POSTGRES_PASSWORD=")) | split("=")[1]' )
@@ -114,7 +112,7 @@ postgres_backup_container() {
     )
 
   for database in $DATABASES; do
-    echo "## database: $database (user: $username password: $password)"
+    echo "# database: $database (user: $username password: $password)"
 
     local backup_dest="${BACKUP_BASE}/${CONTAINER_SHORT}/${DATESTAMP}"
     make_backup_dest ${backup_dest}
@@ -130,6 +128,32 @@ postgres_backup_container() {
 
 }
 
+postgres_backup_container() {
+  local username=$( docker inspect "$container" | jq -r '.[0].Config.Env[] | select(startswith("POSTGRES_USER=")) | split("=")[1]' )
+  local password=$( docker inspect "$container" | jq -r '.[0].Config.Env[] | select(startswith("POSTGRES_PASSWORD=")) | split("=")[1]' )
+  local database=$( docker inspect "$container" | jq -r '.[0].Config.Env[] | select(startswith("POSTGRES_DB=")) | split("=")[1]' )
+  
+  DATABASES=$(
+    docker exec "$container" psql -U "$username" --tuples-only -P format=unaligned \
+      -c "SELECT datname FROM pg_database WHERE NOT datistemplate AND datname <> 'postgres'" 
+    )
+
+  for database in $DATABASES; do
+    echo "# database: $database (user: $username password: $password)"
+
+    local backup_dest="${BACKUP_BASE}/${CONTAINER_SHORT}/${DATESTAMP}"
+    make_backup_dest ${backup_dest}
+
+    local backup_file="${backup_dest}/${database}-${TIMESTAMP}.sql.gz"
+    echo "pg_dump: $backup_file"
+    docker exec "$container" pg_dump -U "$username" "$database" | gzip > $backup_file
+
+    local backup_file="${backup_dest}/${database}-${TIMESTAMP}.dump"
+    echo "pg_dump: $backup_file"
+    docker exec "$container" pg_dump -U "$username" --format=c "$database" > "${backup_file}"
+  done
+
+}
 ## BEGIN MAIN
 test -n "$DEBUG" && echo "DEBUG: $DEBUG" 1>&2
 
@@ -139,26 +163,29 @@ if [ ! -d "$BACKUP_BASE" ]; then
   fi
 fi
 
-for container in $(docker container ls --format "{{.Names}}"); do
-  echo -e "\n### container: $container"
+# for container in $(docker container ls --format "{{.Names}}"); do
+docker ps --format "{{.Names}} {{.Image}}" | while read container image; do
   CONTAINER_SHORT=${container//\.[0-9]*\.[A-Za-z0-9]*/}
+  echo -e "\n### container: $CONTAINER_SHORT (${container})"
 
-  if echo $container | grep -iEq "db|postgis|postgres"; then
+  if echo $image | grep -iEq "postgis|postgres"; then
+  #   image=$( docker inspect "$container" --format '{{.Config.Image}}' )
+     echo "## image: $image"
+
+     postgres_backup_container
+
+  elif echo $image | grep -iEq "mariadb|mysql"; then
     image=$( docker inspect "$container" --format '{{.Config.Image}}' )
-    echo "### image: $image"
-
-    postgres_backup_container
-
-  elif echo $container | grep -iEq "mariadb|mysql"; then
-    image=$( docker inspect "$container" --format '{{.Config.Image}}' )
-    echo "### image: $image"
+    echo "## image: $image"
 
     # mysql_backup_container
 
   else
-    # sqlite_backup_container
-    echo "skipping $container"
+    sqlite_backup_container
+    # echo "skipping $container"
   fi
 done
 
-cleanup_backups
+# cleanup_backups
+
+# check_backups - make sure for all server folders there is a backup for today
