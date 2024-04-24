@@ -8,13 +8,22 @@ CanonicalizeMaxDots 1
 
 CanonicalDomains haume.nz shmoo.com
 
-Host *.haume.nz *.shmoo.com
+Host ponga
+  HostName ponga
+
+Host nikau
+  HostName nikau
+
+Host ponga
+  HostName ponga
+
+Host *.haume.nz *.shmoo.com *.local
   ForwardAgent yes
 
 Host github.com *.github.com
   CheckHostIP no
 
-Match host "*.cf"
+Match host *.cf
   ProxyCommand cloudflared access ssh --hostname $(echo %h | sed 's/\.cf$/.haume.nz/')
   ForwardAgent yes
 

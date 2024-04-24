@@ -1,27 +1,73 @@
-// https://zed.dev/docs/configuring-zed 
+// https://zed.dev/docs/configuring-zed
 // CMD-SHIFT-P and `open default settings` for default settings
+// "theme": "Ultimate Dark Neo",
+// "theme": "Gruvbox Dark",
+// "buffer_font_family": "Recursive Mono Casual Static",
+// "buffer_font_family": "Comic Code Ligatures",
+// "buffer_font_family": "Fantasque Sans Mono",
 {
-  "theme": "Gruvbox Dark",
-  "buffer_font_family": "Recursive Mono Casual Static",
-  "buffer_font_size": 16,
-  "copy_on_select": true,
-  "autosave": "on_focus_change",
-  "format_on_save": "on",
-  "preferred_line_length": 80,
-  "hard_tabs": false,
-  "tab_size": 2,
-  "tabs": {
-    "git_status": true,
-    "close_position": "right"
-  },
-  "project_panel": {
-    "dock": "right",
-    "git_status": true
-  },
-  "collaboration_panel": {
-    "dock": "right"
-  },
-  "assistant": {
-    "dock": "right"
-  }
+    "autosave": "on_window_change",
+    "bindings": {
+        "cmd-shift-k": "editor::DeleteLine"
+    },
+    "buffer_font_family": "Comic Code Ligatures",
+    "buffer_font_size": 16,
+    "format_on_save": "on",
+    "hard_tabs": false,
+    "preferred_line_length": 80,
+    "show_whitespaces": "selection",
+    "tab_size": 2,
+    "theme": "Gruvbox Dark",
+    "assistant": {
+        "dock": "right"
+    },
+    "collaboration_panel": {
+        "dock": "right"
+    },
+    "copilot": {
+        "disabled_globs": [".env"]
+    },
+    "experimental.theme_overrides": {
+        "syntax": {
+            "property": {
+                // "font_weight": 600
+            }
+        }
+    },
+    "git": {
+        "git_gutter": "tracked_files"
+    },
+    "inlay_hints": {
+        "enabled": true,
+        "show_type_hints": true,
+        "show_parameter_hints": true,
+        "show_other_hints": true
+    },
+    "language_overrides": {
+        "JSON": {
+            "tab_size": 4
+        }
+    },
+    "project_panel": {
+        "dock": "right",
+        "git_status": true
+    },
+    "tabs": {
+        "git_status": true,
+        "close_position": "right"
+    },
+    "telemetry": {
+        "diagnostics": false,
+        "metrics": false
+    },
+    "terminal": {
+        "alternate_scroll": "off",
+        "copy_on_select": true,
+        "env": {
+            "FooBarTest": "baz"
+        },
+        "font_family": "Pragmata Pro",
+        "font_size": 16,
+        "working_directory": "current_project_directory"
+    }
 }

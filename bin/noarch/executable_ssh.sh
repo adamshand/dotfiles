@@ -89,10 +89,10 @@ for ssh_host in $SSH_HOSTS; do
   if echo $ssh_host | grep ":" > /dev/null; then
     SSH_HOST=${ssh_host%:*}
     SSH_DIR=${ssh_host#*:}
-  else 
+  else
     SSH_HOST=${ssh_host}
     SSH_DIR="~"
-  fi 
+  fi
 
   test $DEBUG && echo "# SSH_HOST: $SSH_HOST SSH_DIR: $SSH_DIR"
 
@@ -122,18 +122,18 @@ for ssh_host in $SSH_HOSTS; do
       -e 'tell application "System Events" to keystroke "t" using {command down}' \
       -e "tell application \"Terminal\" to do script \"exec ssh $SSH_OPTIONS $SSH_HOST\" in front window" \
 
-  elif [ "$APP" == "Guake" ]; then 
+  elif [ "$APP" == "Guake" ]; then
     # TODO: untested
     SSH_OPTIONS="$SSH_OPTIONS -o RequestTTY=yes -o RemoteCommand=\"cd $SSH_DIR; $SHELL -li\""
     guake -n foo -e "\ssh $SSH_OPTIONS $SSH_HOST; exit" -r "${USER}@${SSH_HOST}"
 
-  elif [ "$APP" == "Gnome" ]; then 
+  elif [ "$APP" == "Gnome" ]; then
     # TODO: untested
     SSH_OPTIONS="$SSH_OPTIONS -o RequestTTY=yes -o RemoteCommand=\"cd $SSH_DIR; $SHELL -li\""
     gnome-terminal --tab-with-profile=SSH -- \ssh $SSH_OPTIONS $SSH_HOST
     #gnome-terminal --tab -- \ssh $SSH_OPTIONS $SSH_HOST
 
-  else 
+  else
     test $DEBUG && echo -e "# No Terminal detected: only connecting $SSH_HOST"
     ## FIXME: doesn't support multiple ssh hosts, not sure there's a way to make that work.
     exec \ssh -o RequestTTY=yes -o RemoteCommand="cd $SSH_DIR; $SHELL -li" "$SSH_HOST"
