@@ -5,36 +5,32 @@ fish_add_path -p ~/bin/noarch
 
 if status is-interactive
   set -g myhostname   (string split "." $hostname)[1]
-  set -g masterhost   chimera
-
-  set -g debug ""
-  if test $myhostname = "chimeraX"
-      set -g debug "true"
-  end
+  set -g platform (uname)
+  set -g DEBUG ""
+  # set -g DEBUG "true"
 
   set -x BC_ENV_ARGS  ~/.bc
   set -x EDITOR       vim
-  set -x EZA_ARG      "-F"
+  set -x EZA_ARG      -F
   set -x EZAL_ARG     "-lh --sort=modified --time-style=long-iso"
   set -x LESS         -FXR
   set -x PAGER        less
   set -x SUDO_PROMPT  "Sudo Password: "
 
-  set platform (uname)
   if test $platform = "Darwin"
-    test $debug; and echo "OS: Darwin"
+    test $DEBUG; and echo "OS: Darwin"
     set -g L_ARG  "-lhPO"
     set -g PS_ARG "auxww"
     source ~/.config/fish/conf.d/darwin.include
 
   else if test $platform = "Linux"
-    test $debug; and echo "OS: Linux"
+    test $DEBUG; and echo "OS: Linux"
     set -g L_ARG  "-lh"
     set -g PS_ARG "-efww"
     source ~/.config/fish/conf.d/linux.include
 
   else
-    test $debug; and echo "OS: Unknown"
+    test $DEBUG; and echo "OS: Unknown"
   end
 
   #########################################################
@@ -54,7 +50,7 @@ if status is-interactive
   alias pwgen   "bw generate -cp --words 2 --separator . --includeNumber | tee /dev/stderr | pbcopy"
 
   if type -q eza
-    test debug; and echo "FOUND: eza"
+    test $DEBUG; and echo "FOUND: eza"
     set COMMON  "--git --git-repos --group --group-directories-first --hyperlink"
     alias l     "eza $COMMON $EZAL_ARG"
     alias ls    "eza $COMMON $EZA_ARG"
@@ -163,16 +159,16 @@ if status is-interactive
   ## PER-HOST OVERRIDES
 
   if test $myhostname = "chimera"
-    test $debug; and echo "HOST: chimera"
+    test $DEBUG; and echo "HOST: chimera"
 
   else if test $myhostname = "kauri"
-    test $debug; and echo "HOST: kauri"
+    test $DEBUG; and echo "HOST: kauri"
 
     set -x RESTIC_PASSWORD_FILE "/home/adam/etc/restic.txt"
     set -x RESTIC_REPOSITORY    "/vol/obelix/restic/"
 
   else if test $myhostname = "beam"; or test $myhostname = "ch-test1"
-    test $debug; and echo "HOST: beam or ch-test1"
+    test $DEBUG; and echo "HOST: beam or ch-test1"
     functions -e mkroot
   end
 
