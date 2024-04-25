@@ -1,0 +1,37 @@
+test $debug; and echo "INCLUDE: conf.d/darwin.include"
+
+fish_add_path -p /opt/homebrew/bin ~/bin/darwin
+fish_add_path -a ~/Library/pnpm /Library/Developer/CommandLineTools/usr/bin
+
+# Install casks to ~/Applications
+set -x HOMEBREW_CASK_OPTS "--appdir=~/Applications"
+
+if test -r "$HOME/.env"
+  set -x CF_API_TOKEN $(awk -F= '/^CF_API_TOKEN=/{print $2}' $HOME/.env)
+end
+
+alias airport   "/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport"
+alias pwgen     "bw generate -cp --words 2 --separator . --includeNumber | tee /dev/stderr | pbcopy"
+alias cpdir     "pwd | pbcopy"
+alias dm        "open -a DiffMerge"
+alias flushdns  "sudo fish -c 'dscacheutil -flushcache; killall -HUP mDNSResponder'"
+alias macvim    "open -a MacVim"
+alias mvim      "~/Applications/MacVim.app/Contents/bin/mvim"
+alias mkdir     "mkdir -p"
+alias telnet    "nc -v"
+alias top       "top -o cpu -O vsize"
+alias updatedb  "sudo -b /usr/libexec/locate.updatedb"
+
+function ipsum
+  set P 5; set S 3
+
+  if test -n "$argv[1]"
+    set P $argv[1]
+  end
+
+  if test -n "$argv[2]"
+    set S $argv[2]
+  end
+
+  curl --silent http://metaphorpsum.com/paragraphs/$P/$S | tee /dev/stderr | pbcopy
+end

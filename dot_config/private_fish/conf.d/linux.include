@@ -1,0 +1,14 @@
+test $debug; and echo "INCLUDE: conf.d/linux.fish"
+
+# /usr/local/bin added automatically via /etc/paths on macOS
+fish_add_path -p ~/bin/linux /usr/local/bin
+
+# Load all saved ssh keys
+#eval (ssh-agent -c)
+#/usr/bin/ssh-add
+
+function sentry
+  if command -v sentry.pl > /dev/null
+    sudo sentry.pl $argv
+  end
+end
