@@ -64,7 +64,7 @@ if [ "${OSTYPE:0:6}" = "darwin" ]; then
   LARG="-lhPO"
 
   if [ -r "${HOME}/.env" ]; then
-    export CF_API_TOKEN=$(awk -F= '/^CF_API_TOKEN=/{print $2}' ~/.env) 
+    export CF_API_TOKEN=$(awk -F= '/^CF_API_TOKEN=/{print $2}' ~/.env)
   fi
 
   alias airport="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport"
@@ -195,6 +195,7 @@ showip() {
 if (( ${+commands[ssh.sh]} )); then
   s () { ssh.sh $*; }
 fi
+
 vade () { links -dump -width 512 http://adam.nz/vade/ | egrep -v '^ *\$' | egrep --color=auto -A2 "^ # .*${1}.*\$" ;}
 
 autoload -U zmv           # zmv '* *' '$f:gs/ /_'; more at: https://strcat.de/zsh/#zmv
@@ -276,4 +277,3 @@ setopt nomenucomplete
 # case insensitive path-completion
 setopt nocaseglob
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
-
