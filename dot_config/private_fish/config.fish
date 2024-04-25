@@ -50,7 +50,6 @@ if status is-interactive
   alias ls      "ls -F"
   alias mkdir   "mkdir -p"
   alias more    "less -F"
-  alias nano    "nano -zbx"
   alias mkroot  "sudo -E fish"
   alias pwgen   "bw generate -cp --words 2 --separator . --includeNumber | tee /dev/stderr | pbcopy"
 

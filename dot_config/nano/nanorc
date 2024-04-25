@@ -4,9 +4,10 @@ set backup
 set backupdir ~/.config/nano/backups
 #set constantshow
 #set guidestripe 80
-#set indicator                          # doesn't work on plimsoll
+set indicator
 #set stripecolor xx
 set linenumbers
+#set nohelp
 set numbercolor black,white
 #set mouse
 set positionlog
@@ -15,7 +16,7 @@ set tabsize 2
 set tabstospaces
 set trimblanks
 
-#bind ^Z suspend main
+bind ^Z suspend main
 
 include ~/.config/nano/syntax/Dockerfile.nanorc
 include ~/.config/nano/syntax/apacheconf.nanorc
