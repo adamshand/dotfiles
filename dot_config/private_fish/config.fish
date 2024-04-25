@@ -57,8 +57,8 @@ if status is-interactive
   if type -q eza
     test debug; and echo "FOUND: eza"
     set COMMON  "--git --git-repos --group --group-directories-first --hyperlink"
-    alias l   "eza $COMMON $EZAL_ARG"
-    alias ls  "eza $COMMON $EZA_ARG"
+    alias l     "eza $COMMON $EZAL_ARG"
+    alias ls    "eza $COMMON $EZA_ARG"
   end
 
   #########################################################
@@ -119,7 +119,7 @@ if status is-interactive
   end
 
   #########################################################
-  ## GENERAL ALIASES & FUNCTIONS
+  ## FUNCTIONS
 
   function flaunt -a search -d "Highlight matching text"
     egrep "($search|\$)"
