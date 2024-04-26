@@ -3,11 +3,14 @@ set fish_greeting ""
 
 fish_add_path -p ~/bin/noarch
 
+theme_gruvbox dark hard
+
 if status is-interactive
   set -g myhostname   (string split "." $hostname)[1]
   set -g platform (uname)
   set -g DEBUG ""
   # set -g DEBUG "true"
+
 
   set -x BC_ENV_ARGS  ~/.bc
   set -x EDITOR       vim
