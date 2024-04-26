@@ -172,16 +172,13 @@ docker ps --format "{{.Names}} {{.Image}}" | while read container image; do
 
   if echo $IMAGE | grep -iEq "postgis|postgres"; then
     postgres_backup_container
-
   elif echo $IMAGE | grep -iEq "mariadb|mysql"; then
     mysql_backup_container
-
   else
     sqlite_backup_container
-    # echo "skipping $container"
   fi
 done
 
 cleanup_backups
 
-# check_backups - make sure for all server folders there is a backup for today
+# TODO: check_backups - every container folder should have a backup for today
