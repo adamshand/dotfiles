@@ -156,32 +156,6 @@ mysql_backup_container() {
   done
 }
 
-postgres_backup_container() {
-  local username=$( docker inspect "$container" | jq -r '.[0].Config.Env[] | select(startswith("POSTGRES_USER=")) | split("=")[1]' )
-  local password=$( docker inspect "$container" | jq -r '.[0].Config.Env[] | select(startswith("POSTGRES_PASSWORD=")) | split("=")[1]' )
-  local database=$( docker inspect "$container" | jq -r '.[0].Config.Env[] | select(startswith("POSTGRES_DB=")) | split("=")[1]' )
-
-  DATABASES=$(
-    docker exec "$container" psql -U "$username" --tuples-only -P format=unaligned \
-      -c "SELECT datname FROM pg_database WHERE NOT datistemplate AND datname <> 'postgres'" 
-    )
-
-  for database in $DATABASES; do
-    echo "# database: $database (user: $username password: $password)"
-
-    local backup_dest="${BACKUP_BASE}/${CONTAINER_SHORT}/${DATESTAMP}"
-    make_backup_dest ${backup_dest}
-
-    local backup_file="${backup_dest}/${database}-${TIMESTAMP}.sql.gz"
-    echo "pg_dump: $backup_file"
-    docker exec "$container" pg_dump -U "$username" "$database" | gzip > $backup_file
-
-    local backup_file="${backup_dest}/${database}-${TIMESTAMP}.dump"
-    echo "pg_dump: $backup_file"
-    docker exec "$container" pg_dump -U "$username" --format=c "$database" > "${backup_file}"
-  done
-}
-
 ## BEGIN MAIN
 test -n "$DEBUG" && echo "DEBUG: $DEBUG" 1>&2
 
@@ -198,12 +172,16 @@ docker ps --format "{{.Names}} {{.Image}}" | while read container image; do
 
   if echo $IMAGE | grep -iEq "postgis|postgres"; then
     postgres_backup_container
+
   elif echo $IMAGE | grep -iEq "mariadb|mysql"; then
     mysql_backup_container
+
   else
     sqlite_backup_container
+    # echo "skipping $container"
   fi
 done
 
 cleanup_backups
-# TODO: check_backups - each container should have a backup folder for today
+
+# check_backups - make sure for all server folders there is a backup for today
