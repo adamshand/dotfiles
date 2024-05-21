@@ -18,9 +18,6 @@
     "show_whitespaces": "selection",
     "tab_size": 2,
     "theme": "Gruvbox Dark",
-    "assistant": {
-        "dock": "right"
-    },
     "collaboration_panel": {
         "dock": "right"
     },
@@ -35,11 +32,15 @@
         }
     },
     "git": {
-        "git_gutter": "tracked_files"
+        "git_gutter": "tracked_files",
+        "inline_blame": {
+            "enabled": true,
+            "delay_ms": 2000
+        }
     },
     "inlay_hints": {
         "enabled": true,
-        "show_type_hints": true,
+        "show_type_hints": false,
         "show_parameter_hints": true,
         "show_other_hints": true
     },
@@ -66,7 +67,7 @@
         "env": {
             "FooBarTest": "baz"
         },
-        "font_family": "Pragmata Pro",
+        "font_family": "FantasqueSansMono Nerd Font",
         "font_size": 16,
         "working_directory": "current_project_directory"
     }
