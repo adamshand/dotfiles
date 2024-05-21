@@ -105,5 +105,7 @@
     "files.eol": "\n",
     "editor.formatOnType": true
   },
-  "editor.linkedEditing": true
+  "editor.linkedEditing": true,
+  "terminal.integrated.fontFamily": "FantasqueSansMono Nerd Font",
+  "codeium.enableCodeLens": false
 }
