@@ -19,9 +19,8 @@ BACKUP_GROUP="staff"
 DEBUG=""
 DEBUG="yes"
 
-DATABASE_REGEX="(db|mysql|mariadb|postgres)"
 EXCLUDE_MOUNT_REGEX="^(/srv|srv/www|/vol/moa/media(/[a-z].*)?)$"
-EXCLUDE_SQLITE_REGEX="^(.*users.*|.*\.bak|.*\.old)$"
+EXCLUDE_SQLITE_REGEX="^(.*\.bak|.*\.old)$"
 
 if [ "$EUID" -ne 0 ]; then
   print_error "must be run as root"
