@@ -17,7 +17,7 @@
     "preferred_line_length": 80,
     "show_whitespaces": "selection",
     "tab_size": 2,
-    "theme": "Gruvbox Dark",
+    "theme": "Monosami Dark",
     "collaboration_panel": {
         "dock": "right"
     },

@@ -49,7 +49,8 @@ cleanup_backups() {
   find "$BACKUP_BASE" -mindepth 1 -type d -empty -print -delete
 
   echo -e "\n## CURRENT BACKUPS: ${BACKUP_BASE}\n"
-  tree --du -sh "$BACKUP_BASE"
+  #tree --du -sh "$BACKUP_BASE"
+  tree "$BACKUP_BASE" --noreport --du -ifFhs | grep '[0-9a-z]/$' | sed 's#/var/backups/db#..#'
 }
 
 sqlite_backup_container() {
