@@ -1,0 +1,100 @@
+# LANGUAGE SERVERS
+[language-server.astro-ls]
+command = "astro-ls"
+args = [ "--stdio" ]
+config = { "typescript" = { "tsdk" = "~/.volta/tools/image/packages/typescript/lib/node_modules/typescript/lib"}, "environment" = "node" }
+
+[language-server.tailwindcss-ls]
+command = "tailwindcss-language-server"
+args = ["--stdio"]
+config = { userLanguages = { astro = "html", "*.astro" = "html" } }
+
+[language-server.emmet-ls]
+args = ["--stdio"]
+command="emmet-language-server"
+
+[language-server.eslint-ls]
+args = ["--stdio"]
+command = "vscode-eslint-language-server"
+
+[language-server.eslint-ls.config]
+validate = "on"
+experimental = { useFlatConfig = false }
+rulesCustomizations = []
+run = "onType"
+problems = { shortenToSingleLine = false }
+nodePath = ""
+
+[language-server.eslint-ls.config.codeAction.disableRuleComment]
+enable = true
+location = "separateLine"
+
+[language-server.eslint-ls.config.codeAction.showDocumentation]
+enable = true
+
+[language-server.eslint-ls.config.codeActionOnSave]
+enable = true
+mode = "fixAll"
+
+[language-server.eslint-ls.config.workingDirectory]
+mode = "location"
+
+# LANGUAGE
+
+[[language]]
+name = "astro"
+scope = "source.astro"
+injection-regex = "astro"
+file-types = ["astro"]
+roots = ["package.json", "astro.config.mjs"]
+language-servers = [ "astro-ls", "tailwindcss-ls" ]
+auto-format = true
+formatter = { command = "prettier", args = ["--parser", "astro"] }
+
+[[language]]
+name = "svelte"
+auto-format = true
+language-servers = [{ name = "tailwindcss-ls", except-features = ["hover"] }, "svelteserver", "eslint-ls"]
+formatter = { command = "prettier" }
+
+[[language]]
+name = "typescript"
+auto-format = true
+language-servers = [{ name = "tailwindcss-ls", except-features = ["hover"] }, "typescript-language-server", "emmet-ls", "eslint-ls"]
+formatter = { command = "prettier" }
+
+[[language]]
+name = "javascript"
+auto-format = true
+language-servers = [{ name = "tailwindcss-ls", except-features = ["hover"] }, "typescript-language-server", "emmet-ls", "eslint-ls"]
+formatter = { command = "prettier" }
+
+[[language]]
+name = "jsx"
+auto-format = true
+language-servers = [ { name = "tailwindcss-ls", except-features = ["hover"]}, "typescript-language-server", "emmet-ls", "eslint-ls"]
+formatter = { command = "prettier" }
+
+[[language]]
+name = "tsx"
+auto-format = true
+language-servers = [ { name = "tailwindcss-ls", except-features = ["hover"]}, "typescript-language-server" , "emmet-ls", "eslint-ls"]
+formatter = { command = "prettier" }
+
+[[language]]
+name = "html"
+auto-format = true
+language-servers = [ "tailwindcss-ls", "vscode-html-language-server" , "emmet-ls", "eslint-ls"]
+formatter = { command = "prettier" }
+
+[[language]]
+name = "css"
+auto-format = true
+language-servers = [ { name="tailwindcss-ls", except-features = ["hover"] }, "vscode-css-language-server" , "emmet-ls" , "eslint-ls"]
+formatter = { command = "prettier" }
+
+[[language]]
+name = "scss"
+auto-format= true
+language-servers = [ { name="tailwindcss-ls", except-features = ["hover"] }, "vscode-css-language-server" , "emmet-ls" , "eslint-ls"]
+formatter = { command = "prettier" }
